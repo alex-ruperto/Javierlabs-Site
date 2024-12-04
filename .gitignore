@@ -1,8 +1,8 @@
 # Node.js/Frontend
-frontend/node_modules/
-frontend/build/
-frontend/.env
-frontend/.cache/
+frontend/javierlabs-frontend/node_modules/
+frontend/javierlabs-frontend/build/
+frontend/javierlabs-frotend/.env
+frontend/javierlabs-frontend/.cache/
 
 # .NET/Backend
 backend/**/bin/
