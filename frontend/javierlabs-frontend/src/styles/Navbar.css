@@ -1,12 +1,31 @@
-﻿.navbar{
-    display: flex;
+﻿/**
+ * Navbar Styles
+ * Contains layout and styles for the navbar, including buttons and site title.
+ */
+
+.navbar{
+    display: flex; /* Arrange children horizontally */
     width: 1440px;
     height: 48px;
     padding-left: 640px;
     justify-content: flex-end;
-    align-items: center;
-    gap: 281px;
+    align-items: center; /* Vertically align center */
+    gap: 281px; /* Space between the site title and the buttons */
+    flex-shrink: 0;
 
-    border: 5px solid var(--gruvbox_bg0);
+    border: 5px solid var(--gruvbox_bg0_s);
+    background: var(--gruvbox_bg0);
 }
 
+.navbar-logo{
+    color:var(--gruvbox_fg1);
+    font-family: "Fira Code", monospace;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height:normal;
+}
+
+.navbar-buttons{
+    display: flex;
+}

@@ -1,8 +1,7 @@
-﻿import React from 'react';
-import '../styles/Navbar.css';
-import Button from './Button.tsx';
+﻿import '../styles/Navbar.css';
+import {Button} from './Button.tsx';
 
-const Navbar: React.FC = () => {
+export function Navbar() {
     return (
         <nav className="navbar">
             {/* Logo */}
@@ -30,6 +29,4 @@ const Navbar: React.FC = () => {
             </div>
         </nav>
     );
-};
-
-export default Navbar;
+}

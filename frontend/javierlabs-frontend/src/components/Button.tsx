@@ -1,5 +1,5 @@
-﻿import React, {ReactElement} from 'react';
-import '../styles/Button.css'
+﻿import '../styles/Button.css'
+import {ReactElement} from "react";
 
 interface ButtonProps {
     backgroundColor: string; // Background color for the button
@@ -13,17 +13,16 @@ interface ButtonProps {
  * @param {ButtonProps} props - The properties for the button.
  * @returns {ReactElement} - The rendered Button component.
  */
-const Button: React.FC<ButtonProps> = (props: ButtonProps): ReactElement => {
-    const { backgroundColor, textColor, text } = props; // Destructured props
-
+export function Button({ backgroundColor, textColor, text }: ButtonProps): ReactElement {
     return (
         <button
             className = "button"
-            style = {{ backgroundColor, color: textColor }}
+            style = {{
+                backgroundColor,
+                color: textColor
+            }}
         >
             {text}
         </button>
     );
 };
-
-export default Button;
