@@ -1,4 +1,4 @@
-import {Navbar} from './components/Navbar';
+import {Home} from './pages/Home'
 import {ReactElement} from "react";
 
 /**
@@ -11,12 +11,7 @@ export function App(): ReactElement {
   return (
       <div>
         {/* Render the site */}
-        <Navbar />
-
-        <main>
-          <h1>Welcome to Javierlabs!</h1>
-          <p>Explore the different sections using the navigation above.</p>
-        </main>
+        <Home />
       </div>
 
   );

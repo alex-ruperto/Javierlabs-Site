@@ -5,22 +5,21 @@
 
 .navbar{
     display: flex; /* Arrange children horizontally */
-    width: 1440px;
-    height: 48px;
-    padding-left: 640px;
+    width: 100%;
+    height: 8vh;
     justify-content: flex-end;
     align-items: center; /* Vertically align center */
-    gap: 281px; /* Space between the site title and the buttons */
-    flex-shrink: 0;
-
-    border: 5px solid var(--gruvbox_bg0_s);
-    background: var(--gruvbox_bg0);
+    background: var(--gruvbox_bg0, #282828FF);
+    border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
 }
 
 .navbar-logo{
-    color:var(--gruvbox_fg1);
+    position: absolute;
+    left: 50%; /* Move logo horizontally to the center */
+    transform: translateX(-50%); /* Adjust to the logo's width for centering */
+    color:var(--gruvbox_fg1, #EBDBB2FF);
     font-family: "Fira Code", monospace;
-    font-size: 24px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 400;
     line-height:normal;
