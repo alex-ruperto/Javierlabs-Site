@@ -11,12 +11,13 @@
     align-items: center; /* Vertically align center */
     background: var(--gruvbox_bg0, #282828FF);
     border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
+    border-radius: 0;
 }
 
 .navbar-logo{
     position: absolute;
     left: 50%; /* Move logo horizontally to the center */
-    transform: translateX(-50%); /* Adjust to the logo's width for centering */
+    transform: translateX(-50%); /* Adjust to the logo's width f`or centering */
     color:var(--gruvbox_fg1, #EBDBB2FF);
     font-family: "Fira Code", monospace;
     font-size: 20px;
