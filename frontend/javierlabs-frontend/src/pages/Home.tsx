@@ -17,7 +17,7 @@ export function Home(): ReactElement {
             <Navbar />
 
             {/* Main content container */}
-            <div className="content-container">
+            <div className="home-content-container">
                 {/* Site Logo/DescriptionFrame */}
                 <div className="logo-frame">
                     <div className="ascii-art">

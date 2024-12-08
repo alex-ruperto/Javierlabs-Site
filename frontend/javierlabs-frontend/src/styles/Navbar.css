@@ -27,5 +27,6 @@
 }
 
 .navbar-buttons{
+    margin-left: auto;
     display: flex;
 }

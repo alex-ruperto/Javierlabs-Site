@@ -9,7 +9,7 @@
     border-radius: 0;
 }
 
-.content-container {
+.home-content-container {
     display: flex;
     justify-content: space-between;
     width: 100%;

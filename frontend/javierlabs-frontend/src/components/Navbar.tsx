@@ -10,21 +10,24 @@ export function Navbar() {
             {/* Navigation Buttons*/}
             <div className="navbar-buttons">
                 <Button
-                    backgroundColor = "var(--gruvbox_fg0)"
-                    textColor = "var(--gruvbox_gray2)"
-                    text = "home"
+                    backgroundColor="var(--gruvbox_fg0)"
+                    textColor="var(--gruvbox_gray2)"
+                    text="home"
+                    to="/"
                 />
 
                 <Button
-                    backgroundColor = "var(--gruvbox_bg3)"
-                    textColor = "var(--gruvbox_gray2)"
-                    text = "about"
+                    backgroundColor="var(--gruvbox_bg3)"
+                    textColor="var(--gruvbox_gray2)"
+                    text="about"
+                    to="/about"
                 />
 
                 <Button
-                    backgroundColor = "var(--gruvbox_bg1)"
-                    textColor = "var(--gruvbox_gray2)"
-                    text = "socials"
+                    backgroundColor="var(--gruvbox_bg1)"
+                    textColor="var(--gruvbox_gray2)"
+                    text="socials"
+                    to="/socials"
                 />
             </div>
         </nav>

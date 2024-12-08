@@ -1,0 +1,10 @@
+﻿.about {
+    width: 100%;
+    height: 100vh;
+    background: var(--gruvbox_bg1, #3C3836FF);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
+    border-radius: 0;
+}
