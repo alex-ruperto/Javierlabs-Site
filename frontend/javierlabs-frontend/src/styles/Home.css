@@ -1,11 +1,18 @@
+/**
+ * Home Stylesheet
+ * Defines the base styles for Home page.
+ */
+
+
 .home {
-    width: 100%;
+    width: 100vw;
+    max-width: 100%;
     height: 100vh;
+    min-width: 80%;
     background: var(--gruvbox_bg1, #3C3836FF);
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
     border-radius: 0;
 }
 
@@ -13,11 +20,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: calc(100vh - 8vh); /* 100vh - height of navbar */
+    height: calc(100vh - 6vh); /* 100vh - height of navbar */
 }
 
 /* Logo frame (left frame) */
 .logo-frame {
+    box-sizing: border-box;
     flex: 1; /* Take up equal space */
     display: flex;
     flex-direction: column; /* Stack content vertically */
@@ -25,23 +33,22 @@
     align-content: center;
     gap: 16px; /* Spacing between items */
     background: var(--gruvbox_bg0, #282828FF); /* Background color */
-    border: 5px solid var(--gruvbox_bg0_s, #32302FFF); /* Border */
-    border-radius:0;
     color: var(--gruvbox_fg1, #EBDBB2);
+    border: 0.25em solid var(--gruvbox_bg0_s, #32302FFF); /* Adds a border */
     font-size: 16px;
     padding-bottom:10%;
 }
 
 .ascii-art{
     white-space: pre;
-    margin-left: 8%;
+    margin-left: 12em;
 }
 
 /* Text style for the key (left part of the line) */
 .key {
     color: var(--gruvbox_blue1, #458588FF);
     font-weight: bold;
-    margin-left: 8%;
+    margin-left: 12em;
 }
 
 /* Text style for the value (right part of the line) */
@@ -51,14 +58,14 @@
 
 /* Editor frame (right frame) */
 .editor-frame {
+    box-sizing: border-box;
     flex: 1; /* Take up equal space */
     display: flex;
     flex-direction: column;
     gap: 16px; /* Spacing between text */
     background: var(--gruvbox_bg0, #3C3836FF);
-    border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
-    border-radius: 0;
     color: var(--gruvbox_aqua1, #689D6AFF);
+    border: 0.25em solid var(--gruvbox_bg0_s, #32302FFF); /* Adds a border */
     font-size: 16px;
 }
 

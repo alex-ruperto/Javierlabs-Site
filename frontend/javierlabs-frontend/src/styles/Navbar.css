@@ -1,16 +1,18 @@
 ﻿/**
- * Navbar Styles
+ * Navbar Stylesheet
  * Contains layout and styles for the navbar, including buttons and site title.
  */
 
 .navbar{
+    box-sizing: border-box;
     display: flex; /* Arrange children horizontally */
     width: 100%;
-    height: 8vh;
+    height: 50px;
     justify-content: flex-end;
     align-items: center; /* Vertically align center */
     background: var(--gruvbox_bg0, #282828FF);
-    border: 5px solid var(--gruvbox_bg0_s, #32302FFF);
+    z-index: 1;
+    border: 0.25em solid var(--gruvbox_bg0_s, #32302FFF); /* Adds a border-like effect */
     border-radius: 0;
 }
 
@@ -29,4 +31,5 @@
 .navbar-buttons{
     margin-left: auto;
     display: flex;
+    height: 100%;
 }
