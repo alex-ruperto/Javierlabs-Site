@@ -10,9 +10,9 @@
     height: 50px;
     justify-content: flex-end;
     align-items: center; /* Vertically align center */
-    background: var(--gruvbox_bg0, #282828FF);
+    background: var(--gruvbox-bg0, #282828FF);
     z-index: 1;
-    border: 0.25em solid var(--gruvbox_bg0_s, #32302FFF); /* Adds a border-like effect */
+    border: 0.25em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border-like effect */
     border-radius: 0;
 }
 
@@ -20,7 +20,7 @@
     position: absolute;
     left: 50%; /* Move logo horizontally to the center */
     transform: translateX(-50%); /* Adjust to the logo's width f`or centering */
-    color:var(--gruvbox_fg1, #EBDBB2FF);
+    color:var(--gruvbox-fg1, #EBDBB2FF);
     font-family: "Fira Code", monospace;
     font-size: 20px;
     font-style: normal;

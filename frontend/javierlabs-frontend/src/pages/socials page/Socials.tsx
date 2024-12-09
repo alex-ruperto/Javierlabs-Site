@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Navbar } from '../components/Navbar';
+import { Navbar } from '../../components/navbar component/Navbar.tsx';
 
 export function Socials(): ReactElement {
     return (

@@ -1,0 +1,71 @@
+﻿.about {
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
+    outline: 0.5em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border-like effect */
+
+}
+
+.about-content-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 6vh); /* 100vh - height of navbar */
+    overflow-y: hidden;
+}
+
+/* Key frames for the circle blinking effect */
+@keyframes blink {
+    0%, 49.9% {
+        opacity: 1;
+    }
+
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes typewriter {
+    from {
+        width: 0; /* start of the effect, no text visible */
+    }
+    to {
+        width: 100% /* text fully visible */
+    }
+}
+
+@keyframes cursor-blink {
+    0%, 49.9% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+.circle{
+    padding-top: 10em;
+    margin-bottom:35em;
+    animation: blink 0.5s infinite;
+}
+
+.typewriter-container {
+    display: inline-flex;
+    font-size: 2rem;
+    margin-bottom:25rem;
+}
+
+.typewriter {
+    display: inline-block; /* Ensure the text behaves like an inline text */
+    overflow: hidden; /* Hide overflowing during the animation */
+    white-space: nowrap; /* Prevent text from wrapping */
+    color:var(--gruvbox-fg1, #EBDBB2FF);
+    animation: typewriter 1.5s steps(30, end) forwards;
+}
+
+.cursor {
+    border-right: 2px solid var(--gruvbox-fg1, #EBDBB2FF); /* Cursor effect */
+    color:var(--gruvbox-fg1, #EBDBB2FF);
+    animation: cursor-blink 0.5s infinite;
+}

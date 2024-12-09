@@ -1,4 +1,4 @@
-﻿import '../styles/Button.css'
+﻿import './Button.css'
 import {ReactElement} from "react";
 import {Link} from "react-router-dom";
 

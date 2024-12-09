@@ -1,5 +1,5 @@
-﻿import '../styles/Navbar.css';
-import {Button} from './Button.tsx';
+﻿import './Navbar.css';
+import {Button} from '../button component/Button.tsx';
 
 export function Navbar() {
     return (
@@ -10,22 +10,22 @@ export function Navbar() {
             {/* Navigation Buttons*/}
             <div className="navbar-buttons">
                 <Button
-                    backgroundColor="var(--gruvbox_fg0)"
-                    textColor="var(--gruvbox_gray2)"
+                    backgroundColor="var(--gruvbox-fg0)"
+                    textColor="var(--gruvbox-gray2)"
                     text="home"
                     to="/"
                 />
 
                 <Button
-                    backgroundColor="var(--gruvbox_bg3)"
-                    textColor="var(--gruvbox_gray2)"
+                    backgroundColor="var(--gruvbox-bg3)"
+                    textColor="var(--gruvbox-gray2)"
                     text="about"
                     to="/about"
                 />
 
                 <Button
-                    backgroundColor="var(--gruvbox_bg1)"
-                    textColor="var(--gruvbox_gray2)"
+                    backgroundColor="var(--gruvbox-bg1)"
+                    textColor="var(--gruvbox-gray2)"
                     text="socials"
                     to="/socials"
                 />

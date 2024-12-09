@@ -1,6 +1,6 @@
 ﻿import {ReactElement} from 'react';
-import {Navbar} from '../components/Navbar';
-import '../styles/Home.css';
+import {Navbar} from '../../components/navbar component/Navbar.tsx';
+import './Home.css';
 
 /**
  * Home page
@@ -58,7 +58,7 @@ export function Home(): ReactElement {
                         </li>
                         <li>
                             <span className="key">Programming Languages: </span>
-                            <span className="value">Python, Java, C#, Kotlin, JavaScript/TypeScript</span>
+                            <span className="value">Python, Java, C#, Kotlin, JS/TS</span>
 
                         </li>
                         <li>
