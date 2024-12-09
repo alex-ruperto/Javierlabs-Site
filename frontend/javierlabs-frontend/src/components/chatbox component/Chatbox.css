@@ -1,0 +1,39 @@
+.chatbox-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    padding: 0.5em;
+    border: 1px solid var(--gruvbox-bg0-s, #32302FFF);
+    background: var(--gruvbox-bg0, #282828FF);
+    border-radius: 0.5em;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chatbox-input{
+    flex-grow: 1;
+    font-size: 1rem;
+    color: var(--gruvbox-fg1, #EBDBB2FF);
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0.5em;
+}
+
+.chatbox-input::placeholder {
+    color: var(--gruvbox-fg2, #D5C4A1FF);
+}
+
+.chatbox-submit-button{
+    background: var(--gruvbox-bg1, #3C3836FF); /* Button background color */
+    color: var(--gruvbox-fg1, #EBDBB2FF); /* Button text color */
+    border: none; /* No border */
+    border-radius: 0.5em; /* Rounded corners */
+    padding: 0.5em 1em; /* Button padding */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.chatbox-submit-button:hover {
+    background: var(--gruvbox-bg2, #504945FF);
+}

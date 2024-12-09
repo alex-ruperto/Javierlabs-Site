@@ -2,6 +2,7 @@ import { useState, useEffect, ReactElement } from 'react';
 import './About.css';
 import {Navbar} from '../../components/navbar component/Navbar.tsx';
 import circle from "../../assets/Circle.svg"
+import {Chatbox} from '../../components/chatbox component/Chatbox.tsx';
 
 export function About(): ReactElement {
     // This tracks whether to show the typewriter effect
@@ -32,8 +33,9 @@ export function About(): ReactElement {
                         <div className="typewriter">What can I help you with?</div>
                         <div className="cursor"></div>
                     </div>
-
                 )}
+
+                <Chatbox />
             </div>
         </div>
     );

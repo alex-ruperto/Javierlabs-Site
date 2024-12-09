@@ -8,6 +8,7 @@
 
 .about-content-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -45,15 +46,13 @@
 }
 
 .circle{
-    padding-top: 10em;
-    margin-bottom:35em;
+    margin-bottom:30em;
     animation: blink 0.5s infinite;
 }
 
 .typewriter-container {
     display: inline-flex;
-    font-size: 2rem;
-    margin-bottom:25rem;
+    margin-bottom:30em;
 }
 
 .typewriter {
@@ -61,6 +60,7 @@
     overflow: hidden; /* Hide overflowing during the animation */
     white-space: nowrap; /* Prevent text from wrapping */
     color:var(--gruvbox-fg1, #EBDBB2FF);
+    font-size: 2rem;
     animation: typewriter 1.5s steps(30, end) forwards;
 }
 
