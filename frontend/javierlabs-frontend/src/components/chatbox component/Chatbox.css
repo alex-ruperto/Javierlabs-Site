@@ -1,3 +1,34 @@
+/* Chatbox container */
+.chatbox-container{
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Full height for a parent container */
+    max-height: 600px; /* Optional: limit height for the chat box */
+    border: 1px solid var(--gruvbox-bg0-s, #32302FFF);
+    border-radius: 8px;
+    background: var(--gruvbox-bg1, #3C3836FF);
+}
+
+/* Thread container for messages */
+.chat-thread {
+    flex: 1; /* Take up all available space */
+    overflow-y: auto; /* Scrollable container */
+    padding: 1rem;
+    background: var(--gruvbox-bg0, #282828FF);
+}
+
+
+/* Individual chat messages */
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--gruvbox-bg2, #504945FF);
+    color: var(--gruvbox-fg1, #EBDBB2FF);
+    border-radius: 5px;
+    max-width: 80%; /* Limit the message width */
+    word-wrap: break-word; /* Wrap long words */
+}
+
 .chatbox-input-container {
     display: flex;
     align-items: center;
