@@ -2,18 +2,24 @@
     width: 100vw;
     max-width: 100%;
     height: 100vh;
-    outline: 0.5em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border-like effect */
-
+    min-width: 80%;
+    background: var(--gruvbox-bg0, #282828FF);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0;
 }
 
 .about-content-container{
     display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: calc(100vh - 6vh); /* 100vh - height of navbar */
-    gap: 2em;
+    height: calc(100vh - 8vh);
+    border: 0.25em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border */
     overflow-y: hidden;
 }
 
@@ -47,13 +53,15 @@
 }
 
 .circle{
-    margin-bottom:30em;
+    margin-top: 5em;
+    margin-bottom:25em;
     animation: blink 0.5s infinite;
 }
 
 .typewriter-container {
+    margin-top: 5rem;
+    margin-bottom:25rem;
     display: inline-flex;
-    margin-bottom:30em;
 }
 
 .typewriter {

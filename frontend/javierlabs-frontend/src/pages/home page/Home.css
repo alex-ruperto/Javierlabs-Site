@@ -3,13 +3,12 @@
  * Defines the base styles for Home page.
  */
 
-
 .home {
     width: 100vw;
     max-width: 100%;
     height: 100vh;
     min-width: 80%;
-    background: var(--gruvbox-bg1, #3C3836FF);
+    background: var(--gruvbox-bg0, #282828FF);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,7 +19,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 100vh /* 100vh - height of navbar */
+    height: calc(100vh - 8vh); /* 100vh - height of navbar */
 }
 
 /* Logo frame (left frame) */

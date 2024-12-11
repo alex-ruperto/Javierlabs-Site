@@ -3,6 +3,7 @@
     align-items: center;
     justify-content: space-between;
     width: 50%;
+    margin-bottom: 8em;
     padding: 0.5em;
     border: 1px solid var(--gruvbox-bg0-s, #32302FFF);
     background: var(--gruvbox-bg0, #282828FF);

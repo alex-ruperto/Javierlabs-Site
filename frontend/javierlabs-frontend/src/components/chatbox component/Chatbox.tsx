@@ -25,7 +25,7 @@ export function Chatbox(): ReactElement {
         <div className="chatbox-input-container">
             {/* Input field for user messages */}
             <input
-                className="chat-input" // CSS class for styling the input field
+                className="chatbox-input" // CSS class for styling the input field
                 type="text"
                 placeholder="Type your message..."
                 value={inputValue}
