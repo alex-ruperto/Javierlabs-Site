@@ -1,5 +1,7 @@
 ﻿/* ChatThread container */
 .chatbox-thread {
+    display:flex;
+    flex-direction: column;
     box-sizing:border-box;
     flex: 1; /* Allow it to take up the remaining height */
     overflow-y: auto; /* Enable vertical scrolling */
@@ -10,6 +12,7 @@
 }
 
 .chat-message {
+    display: inline-block;
     max-width: 75%; /* Limit the width of messages */
     margin-bottom: 1rem; /* Add spacing between messages */
     padding: 0.5rem 1rem; /* Padding inside the message bubble */
