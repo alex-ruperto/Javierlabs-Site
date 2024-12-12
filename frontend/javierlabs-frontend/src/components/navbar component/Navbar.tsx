@@ -1,14 +1,27 @@
 ﻿import './Navbar.css';
+import menu from '../../assets/Menu.svg';
 import {Button} from '../button component/Button.tsx';
+import {ReactElement, useState} from "react";
 
-export function Navbar() {
+export function Navbar(): ReactElement {
+    const [isMenuOpen, setIsMenuOpen] = useState(false); // State tracking of the hamburger menu visibility
+
+    function toggleMenu() {
+        setIsMenuOpen(!isMenuOpen);
+    }
+
     return (
         <nav className="navbar">
-            {/* Logo */}
+            {/* Centered Logo */}
             <div className="navbar-logo">.javierlabs</div>
 
+            {/* Hamburger menu for mobile */}
+            <div className="hamburger-menu" onClick={toggleMenu}>
+                <img src={menu} alt="Menu"></img>
+            </div>
+
             {/* Navigation Buttons*/}
-            <div className="navbar-buttons">
+            <div className={`navbar-buttons ${isMenuOpen ? 'open' : ''}`}>
                 <Button
                     backgroundColor="var(--gruvbox-fg0)"
                     textColor="var(--gruvbox-gray2)"

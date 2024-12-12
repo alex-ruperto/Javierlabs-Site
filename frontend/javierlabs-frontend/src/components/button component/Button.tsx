@@ -34,4 +34,4 @@ export function Button({ backgroundColor, textColor, text, to}: ButtonProps): Re
             {text}
         </button>
     );
-};
+}

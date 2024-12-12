@@ -12,7 +12,6 @@
 }
 
 .chat-message {
-    display: inline-block;
     max-width: 75%; /* Limit the width of messages */
     margin-bottom: 1rem; /* Add spacing between messages */
     padding: 0.5rem 1rem; /* Padding inside the message bubble */

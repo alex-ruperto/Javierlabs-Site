@@ -2,7 +2,6 @@
     width: 100vw;
     max-width: 100%;
     height: 100vh;
-    min-width: 80%;
     background: var(--gruvbox-bg0, #282828FF);
     display: flex;
     flex-direction: column;
@@ -12,29 +11,55 @@
 
 .socials-content-container{
     display: flex;
-    width: 100%;
-    box-sizing: border-box;
-    flex-direction: row;
+    flex-direction: column; /* Arrange items vertically */
     justify-content: center;
-    align-items: center;
+    align-items:center;
+    width: 100vw; /* Allow container to span full width */
     height: calc(100vh - 8vh);
-    border: 0.25em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border */
-    column-gap: 2vw;
-    overflow-y: hidden;
+    padding: 2vh; /* Add padding inside the container */
+    box-sizing: border-box;
 }
 
-.socials-image-group{
-    display:flex;
-    flex-direction: column;
-    gap: 2vh;
-}
-
-.socials-links {
+.socials-items {
+    align-items:center;
+    width: 80vw;
     display: flex;
-    flex-direction: column;
-    gap: 3.5vh
+    flex-direction:column;
+    gap: 2rem; /* Space between each icon-text pair */
 }
-.socials-links a{
+.socials-item {
+    display: flex; /* Arrange icon and link side by side */
+    align-items: center; /* Align items vertically center */
+    gap: 1rem; /* Space between icon and text */
+    width: 50%; /* Ensure the row spans full width */
+    justify-content: flex-start; /* Align icon and text together */
+}
 
-    color: var(--gruvbox-blue1, #458588FF); /* Set your desired color */
+.socials-item img {
+    width: 2rem; /* Icon size */
+    height: 2rem;
+}
+
+.socials-item a {
+    color: var(--gruvbox-blue1, #458588FF); /* Link color */
+    font-size: 1.25rem;
+    text-decoration: none;
+    word-break: break-word; /* Break long URLs */
+    text-align: left; /* Align text to the left */
+}
+
+.socials-item a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+/* Responsive Styles for Small Screens */
+@media screen and (max-width: 768px) {
+    .socials-image-group {
+        gap: 5vh; /* Increase gap between elements on smaller screens */
+    }
+
+    .socials-links {
+        font-size: 1.5rem; /* Reduce font size on smaller screens */
+        gap: 5vh;
+    }
 }
