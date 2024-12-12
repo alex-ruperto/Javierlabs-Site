@@ -11,7 +11,9 @@ export function About(): ReactElement {
     const [showCircle, setShowCircle] = useState(true);
     // Controls the visibility of the typewriter
     const [showTypewriter, setShowTypewriter] = useState(false);
-    // Controls the visibility of the chatbox
+    // Controls the visibility of the chat box
+    const [showChatBox, setShowChatBox] = useState(false);
+    // Controls the visibility of the chat thread
     const [showChatThread, setShowChatThread] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
 
@@ -22,11 +24,11 @@ export function About(): ReactElement {
     };
 
     useEffect(() => {
-        // Show typewriter effect after the circle has been deisplayed for three seconds.
+        // Show typewriter effect after the circle has been displayed for three seconds.
         const timeout = setTimeout(() => {
+            setShowChatBox(true);
             setShowCircle(false);
             setShowTypewriter(true);
-            setShowChatThread(false);
         }, 3000); // wait 3 seconds before switching
 
         // Clean up timeout component on component unmount
@@ -35,6 +37,8 @@ export function About(): ReactElement {
         []
     );
 
+
+
     return (
         <div className="about">
             <Navbar />
@@ -42,7 +46,7 @@ export function About(): ReactElement {
             <div className="about-content-container">
                 {/* Show blinking circle first */}
                 {showCircle && (
-                    <div className="circle">
+                    <div className="circle-container">
                         <img src={circle} alt="Circle"></img>
                     </div>
                 )}
@@ -57,11 +61,20 @@ export function About(): ReactElement {
 
                 {/* Chat Thread */}
                 {showChatThread && (
-                    <ChatThread messages={messages}/>
+                    <div className="chat-thread-container">
+                        <ChatThread messages={messages} />
+                    </div>
+                )}
+
+                {/* Chat Input Box */}
+                {showChatBox && (
+                    <div className="chatbox-container-wrapper">
+                        <Chatbox addMessage={addMessage}/>
+                    </div>
                 )}
 
 
-                <Chatbox addMessage={addMessage}/>
+
             </div>
         </div>
     );

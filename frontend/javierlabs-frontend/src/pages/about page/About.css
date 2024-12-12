@@ -16,10 +16,27 @@
     box-sizing: border-box;
     flex-direction: column;
     justify-content: center;
+    gap: 10vh;
     align-items: center;
     height: calc(100vh - 8vh);
     border: 0.25em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border */
     overflow-y: hidden;
+}
+
+.chat-thread-container{
+    width: 80%;
+    max-height: 50%;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.chatbox-container-wrapper {
+    margin-top: 1rem;
+    width: 80%;
+}
+
+.circle-container{
+    animation: blink 0.5s infinite;
 }
 
 /* Key frames for the circle blinking effect */
@@ -51,14 +68,8 @@
     }
 }
 
-.circle{
-    margin-top: 10em;
-    animation: blink 0.5s infinite;
-}
-
 .typewriter-container {
-    margin-top: 10rem;
-    display: inline-flex;
+    box-sizing: border-box;
 }
 
 .typewriter {

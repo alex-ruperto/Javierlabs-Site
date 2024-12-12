@@ -7,7 +7,6 @@
     background: var(--gruvbox-bg0, #282828FF); /* Background color of the chat thread */
     border: 1px solid var(--gruvbox-bg0-s, #32302FFF); /* Border around the thread */
     border-radius: 0.5rem; /* Slightly rounded corners */
-    width: 50vw;
 }
 
 .chat-message {
