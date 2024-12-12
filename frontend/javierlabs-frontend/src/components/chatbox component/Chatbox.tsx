@@ -1,39 +1,41 @@
 import {useState, ReactElement} from 'react';
 import "./Chatbox.css";
+import {Message} from "../chatthread component/ChatThread.tsx"
 import React from "react";
 
-type Message = {
-    text: string;
-    sender: 'user' | 'bot';
+// triggers the addMessage function in the parent component (about page)
+type ChatboxProps = {
+    addMessage: (message: Message) => void; // Function that adds a message
 };
-
-export function Chatbox(): ReactElement {
-    /* messages is the state variable that stores the current list of chat messages
-     setMessages is the function that updates the messages state.
-     each message in the messages array is an object with the text and sender properties.
-     */
-    const [messages, setMessages] = useState<Message[]>([]);
-    const handleInputChange= (e:React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value); // update the state with the input value
-    }
+export function Chatbox( { addMessage }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
 
-    const handleSubmit = () => {
-        if (inputValue.trim() != '') {
-            console.log('User Input: ', inputValue); // Handle user input
+    // handle changes of the input box
+    function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
+        setInputValue(e.target.value); // update the state with the input value
+    }
 
+    // handle the submit functionality in the input box
+    function handleSubmit() {
+        if (inputValue.trim() != '') {
             // Add user's message to the chat
             const userMessage: Message = { text: inputValue, sender: 'user' };
-            setMessages((prev) => [...prev, userMessage]);
+            addMessage(userMessage);
 
             // Simulate a bot response
             const botMessage: Message = { text: `You said: ${inputValue}`, sender: 'bot'}
             setTimeout(() => {
-                setMessages(prev => [...prev, botMessage]);
+                addMessage(botMessage);
             }, 500);
 
             // Clear the text field
             setInputValue('');
+        }
+    }
+
+    function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>){
+        if (e.key === 'Enter'){
+            handleSubmit();
         }
     }
 
@@ -44,27 +46,15 @@ export function Chatbox(): ReactElement {
 
     return (
         <div className="chatbox-container">
-            {/* Chat thread */}
-            <div className="chatbox-thread">
-                {messages.map((message, index) => (
-                    <div
-                        key={index}
-                        className={`chat-message ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}
-                    >
-                        {message.text}
-                    </div>
-                ))}
-            </div>
-
             {/* Input field for user messages */}
             <div className="chatbox-input-container">
-
                 <input
                     className="chatbox-input" // CSS class for styling the input field
                     type="text"
                     placeholder="Type your message..."
                     value={inputValue}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyPress}
                 />
                 {/* Button submit the input */}
                 <button

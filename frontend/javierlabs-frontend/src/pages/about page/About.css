@@ -52,14 +52,12 @@
 }
 
 .circle{
-    margin-top: 5em;
-    margin-bottom:25em;
+    margin-top: 10em;
     animation: blink 0.5s infinite;
 }
 
 .typewriter-container {
-    margin-top: 5rem;
-    margin-bottom:25rem;
+    margin-top: 10rem;
     display: inline-flex;
 }
 

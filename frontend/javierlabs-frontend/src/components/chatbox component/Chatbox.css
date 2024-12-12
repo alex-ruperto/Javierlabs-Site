@@ -2,21 +2,14 @@
 .chatbox-container{
     display: flex;
     flex-direction: column;
-    height: 100%; /* Full height for a parent container */
-    max-height: 600px; /* Optional: limit height for the chat box */
+    align-items:center;
+    justify-content: center;
+    width: 50vw;
+    height: 10vh;
     border: 1px solid var(--gruvbox-bg0-s, #32302FFF);
     border-radius: 8px;
     background: var(--gruvbox-bg1, #3C3836FF);
 }
-
-/* Thread container for messages */
-.chat-thread {
-    flex: 1; /* Take up all available space */
-    overflow-y: auto; /* Scrollable container */
-    padding: 1rem;
-    background: var(--gruvbox-bg0, #282828FF);
-}
-
 
 /* Individual chat messages */
 .chat-message {
@@ -33,8 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 50%;
-    margin-bottom: 8em;
+    width: 95%;
     padding: 0.5em;
     border: 1px solid var(--gruvbox-bg0-s, #32302FFF);
     background: var(--gruvbox-bg0, #282828FF);

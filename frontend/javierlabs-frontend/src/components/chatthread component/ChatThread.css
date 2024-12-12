@@ -1,0 +1,46 @@
+﻿/* ChatThread container */
+.chatbox-thread {
+    box-sizing:border-box;
+    flex: 1; /* Allow it to take up the remaining height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 1rem; /* Add some padding for spacing */
+    background: var(--gruvbox-bg0, #282828FF); /* Background color of the chat thread */
+    border: 1px solid var(--gruvbox-bg0-s, #32302FFF); /* Border around the thread */
+    border-radius: 0.5rem; /* Slightly rounded corners */
+    width: 50vw;
+}
+
+.chat-message {
+    max-width: 75%; /* Limit the width of messages */
+    margin-bottom: 1rem; /* Add spacing between messages */
+    padding: 0.5rem 1rem; /* Padding inside the message bubble */
+    border-radius: 10px; /* Rounded corners for message bubbles */
+    word-wrap: break-word; /* Wrap long text */
+}
+
+.user-message {
+    align-self: flex-end; /* Right-align the user's messages */
+    background: var(--gruvbox-aqua1, #689D6AFF); /* Background color for user messages */
+    color: var(--gruvbox-fg1, #EBDBB2FF); /* Text color for user messages */
+}
+
+.bot-message {
+    align-self: flex-start; /* Left-align the bot's messages */
+    background: var(--gruvbox-bg2, #504945FF); /* Background color for bot messages */
+    color: var(--gruvbox-fg1, #EBDBB2FF); /* Text color for bot messages */
+}
+
+.chat-thread::-webkit-scrollbar {
+    align-self: flex-start; /* Left-align the bot's messages */
+    background: var(--gruvbox-bg2, #504945FF); /* Background color for bot messages */
+    color: var(--gruvbox-fg1, #EBDBB2FF); /* Text color for bot messages */
+}
+
+.chat-thread::-webkit-scrollbar-thumb {
+    background: var(--gruvbox-gray1, #928374); /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar */
+}
+
+.chat-thread::-webkit-scrollbar-track {
+    background: var(--gruvbox-bg1, #3C3836FF); /* Scrollbar track color */
+}
