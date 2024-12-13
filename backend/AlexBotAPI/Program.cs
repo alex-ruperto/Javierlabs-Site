@@ -1,44 +1,43 @@
+using AlexBotAPI.Helper;
+using AlexBotAPI.Services;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Use Serilog for logging from the start
+builder.Host.UseSerilog((context, config) =>
+{
+    config.MinimumLevel.Debug()
+        .WriteTo.Console()
+        .WriteTo.File("logs/alexbotapi_service.log", rollingInterval: RollingInterval.Day);
+});
+
+
+
+// Add services to the DI container
+builder.Services.AddSingleton<KeyVaultService>();
+builder.Services.AddControllers();
+
+// Add logging configuration
+LoggingConfig.AddLoggingConfiguration(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var keyVaultService = new KeyVaultService(); // Create an instance of KeyVaultService
+    string secretName = "Test-Secret"; // Replace with your secret name
+    var secretValue = await keyVaultService.GetSecret(secretName); // Await the asynchronous call
+    Log.Information("Retrieved Secret: {SecretValue}", secretValue); // Log the retrieved secret
+}
+catch (Exception ex)
+{
+    Log.Error("Error retrieving secret: {ErrorMessage}", ex.Message);
 }
 
-app.UseHttpsRedirection();
+// Use Serilog for request logging
+app.UseSerilogRequestLogging();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+// Configure the HTTP request pipeline
+app.MapControllers();
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
