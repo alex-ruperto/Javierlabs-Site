@@ -30,24 +30,31 @@
     flex-direction: column; /* Stack content vertically */
     justify-content: center;
     align-content: center;
-    gap: 16px; /* Spacing between items */
+    gap: 10%; /* Spacing between items */
     background: var(--gruvbox-bg0, #282828FF); /* Background color */
     color: var(--gruvbox-fg1, #EBDBB2);
     border: 0.25em solid var(--gruvbox-bg0-s, #32302FFF); /* Adds a border */
     font-size: 16px;
-    padding-bottom:10%;
 }
 
 .ascii-art{
     white-space: pre;
-    margin-left: 5em;
+    margin: 0;
+    align-self: center;
+}
+
+ul {
+    margin: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+    align-self: center; /* Center the whole block horizontally */
+    text-align: start; /* Center-align the text */
+    list-style-type: none; /* No bullet points */
 }
 
 /* Text style for the key (left part of the line) */
 .key {
     color: var(--gruvbox-blue1, #458588FF);
     font-weight: bold;
-    margin-left: 5rem;
 }
 
 /* Text style for the value (right part of the line) */
@@ -72,4 +79,56 @@
     margin-top: 2%;
     margin-left: 2%;
     margin-right: 2%;
+}
+
+@media screen and (max-width: 768px) {
+    .home-content-container{
+        flex-direction: column;
+        justify-content: flex-start;
+        height: calc(100vh - 8vh);
+    }
+
+    .logo-frame, .editor-frame {
+        margin: 0;
+        padding: 0;
+    }
+
+    .logo-frame{
+        flex: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        padding-bottom: 5%;
+    }
+    .editor-frame {
+        flex: none;
+        width: 100%;
+        margin-top: 0;
+
+    }
+    .ascii-art {
+        margin: 0;
+        align-self: center;
+        transform: scale(0.8); /* Scale down for smaller screens */
+    }
+
+    ul li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .key {
+        margin: 0 0 1%;
+    }
+
+    .value {
+        margin: 0 0 6%;
+    }
+
+    .editor-text{
+        margin: 1rem;
+        font-size: 14px;
+    }
 }
