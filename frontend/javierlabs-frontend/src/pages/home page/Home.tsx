@@ -1,6 +1,6 @@
 ﻿import {ReactElement} from 'react';
-import {Navbar} from '../components/Navbar';
-import '../styles/Home.css';
+import {Navbar} from '../../components/navbar component/Navbar.tsx';
+import './Home.css';
 
 /**
  * Home page
@@ -17,9 +17,22 @@ export function Home(): ReactElement {
             <Navbar />
 
             {/* Main content container */}
-            <div className="content-container">
+            <div className="home-content-container">
                 {/* Site Logo/DescriptionFrame */}
                 <div className="logo-frame">
+                    <div className="ascii-art">
+                        <pre>
+                            {`
+   _             _           _       _
+  (_) __ ___   _(_) ___ _ __| | __ _| |__  ___
+  | |/ _\` \\ \\ / / |/ _ \\ '__| |/ _\` | '_ \\/ __|
+  | | (_| |\\ V /| |  __/ |  | | (_| | |_) \\__ \\
+ _/ |\\__,_| \\_/ |_|\\___|_|  |_|\\__,_|_.__/|___/
+|__/
+                            `}
+                        </pre>
+
+                    </div>
                     <ul>
                         <li>
 
@@ -45,7 +58,7 @@ export function Home(): ReactElement {
                         </li>
                         <li>
                             <span className="key">Programming Languages: </span>
-                            <span className="value">Python, Java, C#, Kotlin, JavaScript/TypeScript</span>
+                            <span className="value">Python, Java, C#, Kotlin, JS/TS</span>
 
                         </li>
                         <li>
@@ -61,15 +74,17 @@ export function Home(): ReactElement {
 
                 {/* Text Editor Frame Frame */}
                 <div className="editor-frame">
-                    <h2>
-                        Hi, thank you for visiting my portfolio! Feel free to check out the
-                        about page to have a chat with my personal assistant. The bot is
-                        powered by the OpenAI Assistants API.
-                    </h2>
-                    <p>
-                        If you're curious about this site's design, it is inspired by the
-                        gruvbox theme for the Neovim text editor.
-                    </p>
+                    <div className="editor-text">
+                        <p>
+                            Hi, thank you for visiting my portfolio! Feel free to check out the
+                            about page to have a chat with my personal assistant. The bot is
+                            powered by the OpenAI Assistants API.
+                            <br /><br />
+                            If you're curious about this site's design, it is inspired by the
+                            gruvbox theme for the Neovim text editor.
+                        </p>
+
+                    </div>
                 </div>
             </div>
         </div>

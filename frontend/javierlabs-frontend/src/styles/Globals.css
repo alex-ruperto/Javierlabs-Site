@@ -1,44 +1,78 @@
 :root {
     --gruvbox-red1: #CC241D;
     --gruvbox-red2: #FB4943;
-    --gruvbox_green1: #99871A;
-    --gruvbox_green2: #B8BB26;
-    --gruvbox_yellow1: #D79921;
-    --gruvbox_yellow2: #FABD2F;
-    --gruvbox_blue1: #458588;
-    --gruvbox_blue2: #83A598;
-    --gruvbox_purple1: #B16286;
-    --gruvbox_purple2: #D3869B;
-    --gruvbox_aqua1: #689D6A;
-    --gruvbox_aqua2: #8EC07C;
-    --gruvbox_gray1: #A89984;
-    --gruvbox_gray2: #928374;
-    --gruvbox_orange1: #D65D0E;
-    --gruvbox_orange2: #FE8019;
-    --gruvbox_bg0: #282828;
-    --gruvbox_bg0_h: #1D2021;
-    --gruvbox_bg0_s: #32302F;
-    --gruvbox_bg1: #3C3836;
-    --gruvbox_bg2: #504945;
-    --gruvbox_bg3: #655C54;
-    --gruvbox_bg4: #7C6F64;
-    --gruvbox_fg0: #FBF1C7;
-    --gruvbox_fg1: #EBDBB2;
-    --gruvbox_fg2: #D5C4A1;
-    --gruvbox_fg3: #BDAE93;
-    --gruvbox_fg4: #A89984;
+    --gruvbox-green1: #99871A;
+    --gruvbox-green2: #B8BB26;
+    --gruvbox-yellow1: #D79921;
+    --gruvbox-yellow2: #FABD2F;
+    --gruvbox-blue1: #458588;
+    --gruvbox-blue2: #83A598;
+    --gruvbox-purple1: #B16286;
+    --gruvbox-purple2: #D3869B;
+    --gruvbox-aqua1: #689D6A;
+    --gruvbox-aqua2: #8EC07C;
+    --gruvbox-gray1: #A89984;
+    --gruvbox-gray2: #928374;
+    --gruvbox-orange1: #D65D0E;
+    --gruvbox-orange2: #FE8019;
+    --gruvbox-bg0: #282828;
+    --gruvbox-bg0-h: #1D2021;
+    --gruvbox-bg0-s: #32302F;
+    --gruvbox-bg1: #3C3836;
+    --gruvbox-bg2: #504945;
+    --gruvbox-bg3: #655C54;
+    --gruvbox-bg4: #7C6F64;
+    --gruvbox-fg0: #FBF1C7;
+    --gruvbox-fg1: #EBDBB2;
+    --gruvbox-fg2: #D5C4A1;
+    --gruvbox-fg3: #BDAE93;
+    --gruvbox-fg4: #A89984;
 }
 
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: "Fira Code", monospace;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.5;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 2.5rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
+h2 {
+    font-size: 2rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
+h3 {
+    font-size: 1.75rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
+h4 {
+    font-size: 1.5rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
+h5 {
+    font-size: 1.25rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
+h6 {
+    font-size: 1rem; /* Adjust for your design needs */
+    color: var(--gruvbox-fg1);
+}
+
 html, body {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
 }
