@@ -4,6 +4,9 @@ using Serilog;
 
 namespace AlexBotAPI.Controllers;
 
+/// <summary>
+/// Controller to handle the Assistant's response over HTTP.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class AssistantController : ControllerBase
@@ -15,6 +18,10 @@ public class AssistantController : ControllerBase
         _openAiService = openAiService;
     }
     
+    /// <summary>
+    /// Handles Streaming of the Assistant's response.
+    /// </summary>
+    /// <param name="prompt">User's prompt to the Assistant.</param>
     [HttpGet("stream")]
     public async Task StreamAssistantResponses([FromQuery] string prompt)
     {
@@ -39,6 +46,9 @@ public class AssistantController : ControllerBase
                     await Response.Body.FlushAsync();
                 }
             }
+            
+            // Close the stream
+            await Response.Body.FlushAsync(); 
         }
         catch (Exception ex)
         {
