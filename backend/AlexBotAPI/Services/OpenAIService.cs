@@ -1,16 +1,15 @@
 using System.ClientModel;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using OpenAI;
 using OpenAI.Assistants;
 using Serilog;
+
+// Refer to the GitHub Repo https://github.com/openai/openai-dotnet?tab=readme-ov-file
 
 // Necessary to enable experimental assistant features. May have to update this file later if certain classes/functions deprecate.
 #pragma warning disable OPENAI001 
 namespace AlexBotAPI.Services;
 
-public class OpenAIService
+public class OpenAiService
 {
     private readonly AssistantClient _assistantClient;
     private readonly string? _assistantId;
@@ -21,7 +20,7 @@ public class OpenAIService
     /// </summary>
     /// <param name="keyVaultService">Provides the necessary keys to access the OpenAI API.</param>
     /// <exception cref="InvalidOperationException">Failure to retrieve secrets from the Azure Key Vault.</exception>
-    public OpenAIService(KeyVaultService keyVaultService)
+    public OpenAiService(KeyVaultService keyVaultService)
     {
         // Retrieve secrets from the key vault
         var apiKey = keyVaultService.GetSecret("OpenAIAPIKey").Result;
@@ -32,15 +31,15 @@ public class OpenAIService
             throw new InvalidOperationException("Failed to retrieve the secrets from the Azure Key Vault.");
         }
         
-        OpenAIClient openAIClient = new OpenAIClient(apiKey);
-        _assistantClient = openAIClient.GetAssistantClient();
+        OpenAIClient openAiClient = new OpenAIClient(apiKey);
+        _assistantClient = openAiClient.GetAssistantClient();
         _assistant = _assistantClient.GetAssistant(_assistantId);
     }
 
     /// <summary>
     /// Creates a thread for the assistant on OpenAI Platform and stream its response.
     /// </summary>
-    /// <param name="userMessage"> Initial message for the assistant to respond to.</param>
+    /// <param name="prompt"> Initial message for the assistant to respond to.</param>
     /// <returns>Streamed assistant response.</returns>
     public async IAsyncEnumerable<string> GetAssistantResponseAsync(string prompt)
     {
@@ -67,17 +66,19 @@ public class OpenAIService
         {
             if (streamingUpdate.UpdateKind == StreamingUpdateReason.RunCreated)
             {
-                var startTime = DateTime.UtcNow;
-                yield return $"--- Run Started at {startTime} ---";
+                Log.Information($"---Run started at {DateTime.Now}");
             }
 
             if (streamingUpdate is MessageContentUpdate contentUpdate)
             {
                 yield return contentUpdate.Text;
             }
+
+            if (streamingUpdate.UpdateKind == StreamingUpdateReason.RunCompleted)
+            {
+                Log.Information($"---Done at {DateTime.Now}");
+            }
         }
     }
 }
-
-
 #pragma warning restore OPENAI001

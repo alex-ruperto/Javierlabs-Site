@@ -15,6 +15,7 @@ builder.Host.UseSerilog((context, config) =>
 
 // Add services to the DI container
 builder.Services.AddSingleton<KeyVaultService>();
+builder.Services.AddSingleton<OpenAiService>();
 builder.Services.AddControllers();
 
 // Add logging configuration
@@ -22,31 +23,6 @@ LoggingConfig.AddLoggingConfiguration(builder.Services);
 
 var app = builder.Build();
 
-// Test OpenAIService and KeyVaultService
-try
-{
-    var keyVaultService = new KeyVaultService();
-    
-    // Pass in the KeyVault service to acquire secrets from the Key Vault
-    var openAIService = new OpenAIService(keyVaultService);
-    
-    // Test prompt to send to the assistant
-    string prompt = "Who is Alex Ruperto?";
-    
-    // Retrieve and log the assistant's responses.
-    await foreach (var s in openAIService.GetAssistantResponseAsync(prompt))
-    {
-        Log.Information(s);
-    };
-}
-catch (Exception ex)
-{
-    Log.Error(ex, "An error occurred while testing the OpenAI service.");
-}   
-finally
-{
-    Log.CloseAndFlush();
-}
 // Use Serilog for request logging
 app.UseSerilogRequestLogging();
 
