@@ -17,10 +17,20 @@ export function About(): ReactElement {
     const [showChatThread, setShowChatThread] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
 
-    const addMessage = (message: Message) => {
+    const addMessage = (message: Message): number => {
+        const index = messages.length;
         setMessages((prevMessage) => [...prevMessage, message]);
         setShowTypewriter(false);
         setShowChatThread(true);
+        return index; // Return the index of the new message
+    };
+
+    const updateMessage= (index: number, updatedMessage: Message) => {
+        setMessages((prevMessages) =>
+            prevMessages.map((msg, i) =>
+                i === index ? {...msg, ...updatedMessage} : msg
+            )
+        );
     };
 
     useEffect(() => {
@@ -69,12 +79,9 @@ export function About(): ReactElement {
                 {/* Chat Input Box */}
                 {showChatBox && (
                     <div className="chatbox-container-wrapper">
-                        <Chatbox addMessage={addMessage}/>
+                        <Chatbox addMessage={addMessage} updateMessage={updateMessage}/>
                     </div>
                 )}
-
-
-
             </div>
         </div>
     );

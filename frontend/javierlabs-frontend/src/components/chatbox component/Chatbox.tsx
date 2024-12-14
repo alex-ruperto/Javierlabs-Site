@@ -1,41 +1,68 @@
-import {useState, ReactElement} from 'react';
+import { useRef, useState, ReactElement } from 'react';
 import "./Chatbox.css";
 import {Message} from "../chatthread component/ChatThread.tsx"
 import React from "react";
 
 // triggers the addMessage function in the parent component (about page)
 type ChatboxProps = {
-    addMessage: (message: Message) => void; // Function that adds a message
+    addMessage: (message: Message) => number; // Function that adds a message
+    updateMessage: (index: number, message: Message) => void; // Update an existing message
 };
-export function Chatbox( { addMessage }: ChatboxProps): ReactElement {
-    const [inputValue, setInputValue] = useState(''); // input field value
 
+export function Chatbox( { addMessage, updateMessage }: ChatboxProps): ReactElement {
+    const [inputValue, setInputValue] = useState(''); // input field value
+    const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
+    const botMessageTextRef = useRef<string>("");
     // handle changes of the input box
     function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value); // update the state with the input value
     }
 
     // handle the submit functionality in the input box
-    function handleSubmit() {
+    async function handleSubmit() {
         if (inputValue.trim() != '') {
             // Add user's message to the chat
             const userMessage: Message = { text: inputValue, sender: 'user' };
             addMessage(userMessage);
 
-            // Simulate a bot response
-            const botMessage: Message = { text: `You said: ${inputValue}`, sender: 'bot'}
-            setTimeout(() => {
-                addMessage(botMessage);
-            }, 500);
+            // Bot response streaming
+            const botMessage: Message = {text: "", sender: "bot"}; // Initially empty
+            const botMessageIndex = addMessage(botMessage);
 
-            // Clear the text field
-            setInputValue('');
+            setResponseIsLoading(true);
+
+            // Fetch the server-side event from the backend (SSE)
+            const eventSource = new EventSource(
+                `http://localhost:5026/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`
+            );
+
+            // Stream the response into one message
+            eventSource.onmessage = (event) => {
+                const chunk = event.data.trim(); // Streamed chunk from the backend
+                console.log("Received chunk: ", chunk); // Debug: log each chunk
+
+                botMessageTextRef.current += chunk + " ";
+
+                // Update the bot's message in real-time
+                updateMessage(botMessageIndex, {
+                    text: botMessageTextRef.current,
+                    sender: "bot",
+                });
+            };
+
+            eventSource.onerror = () => {
+                eventSource.close();
+                setResponseIsLoading(false);
+                botMessageTextRef.current = "";
+            }
+
+            setInputValue("");
         }
     }
 
-    function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>){
+    async function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>){
         if (e.key === 'Enter'){
-            handleSubmit();
+            await handleSubmit();
         }
     }
 
@@ -55,13 +82,15 @@ export function Chatbox( { addMessage }: ChatboxProps): ReactElement {
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyPress}
+                    disabled={responseIsLoading} // Disable input during streaming
                 />
                 {/* Button submit the input */}
                 <button
                     className="chatbox-submit-button"
                     onClick={handleSubmit}
+                    disabled={responseIsLoading}
                 >
-                    Send
+                    {responseIsLoading ? "Loading...": "Send"}
                 </button>
             </div>
         </div>
