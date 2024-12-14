@@ -68,13 +68,11 @@ public class OpenAIService
             if (streamingUpdate.UpdateKind == StreamingUpdateReason.RunCreated)
             {
                 var startTime = DateTime.UtcNow;
-                Log.Information($"--- Run Started at {startTime} ---");
                 yield return $"--- Run Started at {startTime} ---";
             }
 
             if (streamingUpdate is MessageContentUpdate contentUpdate)
             {
-                Log.Information(contentUpdate.Text);
                 yield return contentUpdate.Text;
             }
         }

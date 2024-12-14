@@ -34,10 +34,10 @@ try
     string prompt = "Who is Alex Ruperto?";
     
     // Retrieve and log the assistant's responses.
-    await foreach (var response in openAIService.GetAssistantResponseAsync(prompt))
+    await foreach (var s in openAIService.GetAssistantResponseAsync(prompt))
     {
-        Log.Information("Assistant Response: {Response}", response);
-    }
+        Log.Information(s);
+    };
 }
 catch (Exception ex)
 {
