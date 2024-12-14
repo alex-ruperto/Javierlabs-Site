@@ -23,18 +23,6 @@ LoggingConfig.AddLoggingConfiguration(builder.Services);
 
 var app = builder.Build();
 
-try
-{
-    var keyVaultService = new KeyVaultService(); // Create an instance of KeyVaultService
-    string secretName = "Test-Secret"; // Replace with your secret name
-    var secretValue = await keyVaultService.GetSecret(secretName); // Await the asynchronous call
-    Log.Information("Retrieved Secret: {SecretValue}", secretValue); // Log the retrieved secret
-}
-catch (Exception ex)
-{
-    Log.Error("Error retrieving secret: {ErrorMessage}", ex.Message);
-}
-
 // Use Serilog for request logging
 app.UseSerilogRequestLogging();
 
