@@ -5,7 +5,7 @@ frontend/javierlabs-frotend/.env
 frontend/javierlabs-frontend/.cache/
 
 # .NET/Backend
-backend/**/bin/
+backend/1**/bin/
 backend/**/obj/
 backend/**/logs/
 backend/**/appsettings.*.json

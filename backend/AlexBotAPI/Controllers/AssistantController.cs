@@ -42,7 +42,7 @@ public class AssistantController : ControllerBase
                 if (!string.IsNullOrEmpty(response))
                 {
                     // Send each token as a server-side event (SSE)
-                    await Response.WriteAsync(response);
+                    await Response.WriteAsync($"data: {response}\n\n");
                     await Response.Body.FlushAsync();
                 }
             }
