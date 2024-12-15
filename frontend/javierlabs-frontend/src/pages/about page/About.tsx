@@ -18,8 +18,8 @@ export function About(): ReactElement {
     const [messages, setMessages] = useState<Message[]>([]);
 
     const addMessage = (message: Message): number => {
-        const index = messages.length;
-        setMessages((prevMessage) => [...prevMessage, message]);
+        const index = messages.length; // Capture the correct index
+        setMessages((prevMessages) => [...prevMessages, message]); // Update the state
         setShowTypewriter(false);
         setShowChatThread(true);
         return index; // Return the index of the new message
@@ -46,8 +46,6 @@ export function About(): ReactElement {
         },
         []
     );
-
-
 
     return (
         <div className="about">

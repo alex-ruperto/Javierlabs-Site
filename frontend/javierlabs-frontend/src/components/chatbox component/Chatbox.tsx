@@ -1,4 +1,4 @@
-import { useRef, useState, ReactElement } from 'react';
+import { useState, ReactElement } from 'react';
 import "./Chatbox.css";
 import {Message} from "../chatthread component/ChatThread.tsx"
 import React from "react";
@@ -12,7 +12,6 @@ type ChatboxProps = {
 export function Chatbox( { addMessage, updateMessage }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
     const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
-    const botMessageTextRef = useRef<string>("");
     // handle changes of the input box
     function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value); // update the state with the input value
@@ -30,6 +29,10 @@ export function Chatbox( { addMessage, updateMessage }: ChatboxProps): ReactElem
             const botMessageIndex = addMessage(botMessage);
 
             setResponseIsLoading(true);
+            setInputValue("");
+
+            // Use a local variable to track the accumulated bot response
+            let botMessageContent = "";
 
             // Fetch the server-side event from the backend (SSE)
             const eventSource = new EventSource(
@@ -38,14 +41,14 @@ export function Chatbox( { addMessage, updateMessage }: ChatboxProps): ReactElem
 
             // Stream the response into one message
             eventSource.onmessage = (event) => {
-                const chunk = event.data.trim(); // Streamed chunk from the backend
+                const chunk = event.data; // Streamed chunk from the backend
                 console.log("Received chunk: ", chunk); // Debug: log each chunk
 
-                botMessageTextRef.current += chunk + " ";
+                botMessageContent += chunk; // Add the chunk to the accumulated response
 
-                // Update the bot's message in real-time
+                // Update the bot's message incrementally
                 updateMessage(botMessageIndex, {
-                    text: botMessageTextRef.current,
+                    text: botMessageContent,
                     sender: "bot",
                 });
             };
@@ -53,10 +56,7 @@ export function Chatbox( { addMessage, updateMessage }: ChatboxProps): ReactElem
             eventSource.onerror = () => {
                 eventSource.close();
                 setResponseIsLoading(false);
-                botMessageTextRef.current = "";
             }
-
-            setInputValue("");
         }
     }
 
