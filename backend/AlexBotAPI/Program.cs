@@ -1,5 +1,7 @@
 using AlexBotAPI.Helper;
 using AlexBotAPI.Services;
+using AlexBotAPI.Models;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +31,34 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
-    
+
+// Add rate limiter options
+builder.Services.Configure<BotApiRateLimitOptions>(
+    builder.Configuration.GetSection(BotApiRateLimitOptions.BotApiRateLimit));
+
+var botApiRateLimitOptions = new BotApiRateLimitOptions();
+builder.Configuration.GetSection(BotApiRateLimitOptions.BotApiRateLimit).Bind(botApiRateLimitOptions);
+var fixedPolicy = "fixed";
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter(policyName: fixedPolicy, limiterOptions =>
+    {
+        limiterOptions.PermitLimit = botApiRateLimitOptions.Limit;
+        limiterOptions.Window = TimeSpan.FromHours(botApiRateLimitOptions.Window);
+        limiterOptions.QueueLimit = botApiRateLimitOptions.QueueLimit;
+        limiterOptions.AutoReplenishment = botApiRateLimitOptions.AutoReplenishment;
+    });
+
+    // Define what happens if the request is rejected due to rate limiting
+    options.OnRejected = (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        return new ValueTask(context.HttpContext.Response.WriteAsync(
+            "Hourly request limit reached. Please try again later.",
+            cancellationToken));
+    };
+});
 
 // Add logging configuration
 LoggingConfig.AddLoggingConfiguration(builder.Services);
@@ -41,6 +70,9 @@ app.UseSerilogRequestLogging();
 
 // Enable Cross-Origin Resource Sharing
 app.UseCors("AllowAllOrigins");
+
+// Use the rate limiter
+app.UseRateLimiter();
 
 // Configure the HTTP request pipeline
 app.MapControllers();

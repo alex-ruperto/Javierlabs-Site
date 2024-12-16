@@ -1,5 +1,6 @@
 ﻿using AlexBotAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 namespace AlexBotAPI.Controllers;
@@ -9,6 +10,7 @@ namespace AlexBotAPI.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("fixed")]
 public class AssistantController : ControllerBase
 {
     private readonly OpenAiService _openAiService;

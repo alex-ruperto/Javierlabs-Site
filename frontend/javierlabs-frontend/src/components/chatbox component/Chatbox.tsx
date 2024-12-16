@@ -46,15 +46,33 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             // This variable accumulates streamed response text
             let botMessageContent = "";
 
-            // Setup SSE to stream the bot's response
-            const eventSource = new EventSource(
-                `http://localhost:5026/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`
-            );
+            // Account for certain responses.
+            const requestUrl = `http://localhost:5026/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
+            const response = await fetch(requestUrl, { method: 'GET'});
+
+            if (response.status === 429) {
+                // Rate limit exceeded
+                updateMessage(botId, { text: "Rate limit exceeded. Please try again later." });
+                setResponseIsLoading(false);
+                return;
+            } else if (response.status === 503) {
+                // Server issue
+                updateMessage(botId, { text: "Server is currently unavailable. Please try again later." });
+                setResponseIsLoading(false);
+                return;
+            } else if (!response.ok) {
+                // Other error
+                updateMessage(botId, { text: "An error occurred. Please try again." });
+                setResponseIsLoading(false);
+                return;
+            }
+
+            // If we get here, response is OK, start the SSE
+            const eventSource = new EventSource(requestUrl);
 
             // On each chunk of data from the SSE:
             eventSource.onmessage = (event) => {
                 const chunk = event.data;            // Current chunk of text from the server
-                console.log("Received chunk: ", chunk);
                 botMessageContent += chunk;          // Append chunk to the accumulated response
 
                 // Update the previously created bot message by its ID
