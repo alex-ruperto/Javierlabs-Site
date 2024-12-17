@@ -17,11 +17,29 @@ export function About(): ReactElement {
     const [showChatThread, setShowChatThread] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
 
-    const addMessage = (message: Message) => {
-        setMessages((prevMessage) => [...prevMessage, message]);
-        setShowTypewriter(false);
-        setShowChatThread(true);
-    };
+    // Function to add a message with a unique ID
+    function addMessage(message: Omit<Message, 'id'>): string {
+        // Generate a unique ID for the message. This can be replaced by any UUID generator if needed.
+        const id = crypto.randomUUID(); // Requires secure context (HTTPS) or a bundler polyfill for older browsers
+
+        // Update the messages state with the new message
+        setMessages((prevMessages) => [...prevMessages, { ...message, id }]);
+        return id; // Return the ID of the newly added message
+    }
+
+    // Update a message by its unique ID
+    function updateMessage(id: string, updatedMessage: Partial<Message>) {
+        setMessages((prevMessages) =>
+            prevMessages.map((msg) => {
+                // If the message has the same ID, update it with new properties
+                if (msg.id === id) {
+                    return { ...msg, ...updatedMessage };
+                }
+                // Otherwise, return it as-is
+                return msg;
+            })
+        );
+    }
 
     useEffect(() => {
         // Show typewriter effect after the circle has been displayed for three seconds.
@@ -36,8 +54,6 @@ export function About(): ReactElement {
         },
         []
     );
-
-
 
     return (
         <div className="about">
@@ -69,12 +85,9 @@ export function About(): ReactElement {
                 {/* Chat Input Box */}
                 {showChatBox && (
                     <div className="chatbox-container-wrapper">
-                        <Chatbox addMessage={addMessage}/>
+                        <Chatbox addMessage={addMessage} updateMessage={updateMessage} setShowChatThread={setShowChatThread}/>
                     </div>
                 )}
-
-
-
             </div>
         </div>
     );

@@ -1,44 +1,79 @@
+using AlexBotAPI.Helper;
+using AlexBotAPI.Services;
+using AlexBotAPI.Models;
+using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Use Serilog for logging from the start
+builder.Host.UseSerilog((context, config) =>
+{
+    config.MinimumLevel.Debug()
+        .WriteTo.Console()
+        .WriteTo.File("logs/alexbotapi_service.log", rollingInterval: RollingInterval.Day);
+});
+
+
+// Add services to the DI container
+builder.Services.AddSingleton<KeyVaultService>();
+builder.Services.AddSingleton<OpenAiService>();
+builder.Services.AddControllers();
+
+// Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
+// Add rate limiter options
+builder.Services.Configure<BotApiRateLimitOptions>(
+    builder.Configuration.GetSection(BotApiRateLimitOptions.BotApiRateLimit));
+
+var botApiRateLimitOptions = new BotApiRateLimitOptions();
+builder.Configuration.GetSection(BotApiRateLimitOptions.BotApiRateLimit).Bind(botApiRateLimitOptions);
+var fixedPolicy = "fixed";
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter(policyName: fixedPolicy, limiterOptions =>
+    {
+        limiterOptions.PermitLimit = botApiRateLimitOptions.Limit;
+        limiterOptions.Window = TimeSpan.FromHours(botApiRateLimitOptions.Window);
+        limiterOptions.QueueLimit = botApiRateLimitOptions.QueueLimit;
+        limiterOptions.AutoReplenishment = botApiRateLimitOptions.AutoReplenishment;
+    });
+
+    // Define what happens if the request is rejected due to rate limiting
+    options.OnRejected = (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        return new ValueTask(context.HttpContext.Response.WriteAsync(
+            "Hourly request limit reached. Please try again later.",
+            cancellationToken));
+    };
+});
+
+// Add logging configuration
+LoggingConfig.AddLoggingConfiguration(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Use Serilog for request logging
+app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
+// Enable Cross-Origin Resource Sharing
+app.UseCors("AllowAllOrigins");
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Use the rate limiter
+app.UseRateLimiter();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+// Configure the HTTP request pipeline
+app.MapControllers();
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
