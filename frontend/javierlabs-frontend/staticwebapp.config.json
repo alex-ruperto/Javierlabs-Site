@@ -1,12 +1,8 @@
 {
   "routes": [
     {
-      "route": "/assets/*",
-      "rewrite": "/assets/:path"
-    },
-    {
       "route": "/*",
-      "rewrite": "/index.html"
+      "rewrite": "/index.html" 
     }
   ]
 }
