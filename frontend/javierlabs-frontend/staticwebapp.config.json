@@ -1,6 +1,12 @@
 {
   "routes": [
     {
+      "route": "/assets/*",
+      "headers": {
+        "Cache-Control": "max-age=86400"
+      }
+    },
+    {
       "route": "/*",
       "rewrite": "/index.html"
     }
