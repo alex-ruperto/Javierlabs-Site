@@ -47,7 +47,7 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             let botMessageContent = "";
 
             // Account for certain responses.
-            const requestUrl = `http://localhost:5026/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
+            const requestUrl = `/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
             const response = await fetch(requestUrl, { method: 'GET'});
 
             if (response.status === 429) {
