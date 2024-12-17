@@ -1,4 +1,4 @@
-name: CI/CD - Javierlabs-Backend
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
