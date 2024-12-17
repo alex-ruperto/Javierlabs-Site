@@ -2,9 +2,7 @@
   "routes": [
     {
       "route": "/assets/*",
-      "headers": {
-        "Cache-Control": "max-age=86400"
-      }
+      "rewrite": "/assets/:path"
     },
     {
       "route": "/*",
