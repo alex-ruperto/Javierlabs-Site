@@ -7,5 +7,4 @@ public class BotApiRateLimitOptions
     public int Window { get; set; } = 1; // Window (per hour)
     public int QueueLimit { get; set; } = 0; // If rate limit exceeded, add a queue? 0 = no queue.
     public bool AutoReplenishment { get; set; } = true; // Automatically reset counter one window is reached.
-
 }
