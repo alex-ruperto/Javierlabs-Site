@@ -1,35 +1,52 @@
-name: CI/CD Pipeline
+# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy dotnet core project to Azure Function App - Javierlabs-Backend
 
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
-  pull_request:
-    branches:
-      - main # Trigger on pull requests targeting the main branch
-        
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/AlexBotAPI' # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '8' # set this to the dotnet version to use
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
     steps:
-    # Step 1: Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    # Step 2: Make scripts executable
-    - name: Make build and deploy scripts executable
-      working-directory: ./scripts
-      run: |
-        chmod +x ./build-frontend.sh
-        chmod +x ./build-backend.sh
-        
-    # Step 3: Build the frontend
-    - name: Build Frontend
-      working-directory: ./scripts
-      run: ./build-frontend.sh
-        
-    # Step 4: Build the backend
-    - name: Build Backend
-      working-directory: ./scripts
-      run: ./build-backend.sh
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: bash
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0993316659C644B1B47A7B2442BEA12C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8A8886DE282947819DCAD6FC65C3EF63 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6648E3FC3EE94582BF7E71EB5B06B3F7 }}
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: 'Javierlabs-Backend'
+          slot-name: 'Production'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          
