@@ -1,4 +1,4 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - Javierlabs-Backend
+name: CI/CD - Javierlabs-Backend
 
 on:
   push:
@@ -45,12 +45,26 @@ jobs:
         with:
           name: .net-app
 
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8E206796633469D9F67DB58B68AAFBE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0A058D97D8E342B5B6F5CB31922E460B }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0E6DE00303F94EC5AC5534AE9B149EBC }}
+
+      - name: Set Environment Variables in Azure Web App
+        uses: Azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp config appsettings set --name Javierlabs-Backend \
+              --resource-group Javierlabs-Site_RG \
+              --settings \
+              JLabsClientId=${{ secrets.JLabsClientId }} \
+              JLabsTenantId=${{ secrets.JLabsTenantId }} \
+              JLabsClientSecret=${{ secrets.JLabsClientSecret }} \
+              JLabsKeyVaultUrl=${{ secrets.JLabsKeyVaultUrl }}
+
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
