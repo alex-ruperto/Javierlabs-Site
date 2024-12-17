@@ -1,4 +1,4 @@
-name: CI/CD - Javierlabs-Backend
+name: CI/CD - Javierlabs-Frontend
 
 on:
   push:

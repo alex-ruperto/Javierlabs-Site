@@ -49,4 +49,5 @@ jobs:
           app-name: 'Javierlabs-Backend'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          remote-build: true
           
