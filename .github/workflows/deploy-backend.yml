@@ -1,4 +1,4 @@
-name: CI/CD - Javierlabs-Backend
+name: Build and deploy ASP.Net Core app to Azure Web App - Javierlabs-Backend
 
 on:
   push:
@@ -6,55 +6,56 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/AlexBotAPI'
-  DOTNET_VERSION: '8.0.x'
-
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
+  build:
+    runs-on: windows-latest
 
     steps:
-      - name: 'Checkout Code'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 'Setup DotNet'
-        uses: actions/setup-dotnet@v1
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '8.x'
 
-      - name: 'Build Project'
-        run: |
-          mkdir -p './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
-          popd
+      - name: Build with dotnet
+        run: dotnet build backend/AlexBotAPI/AlexBotAPI.csproj --configuration Release
 
-      - name: 'Login to Azure'
+      - name: dotnet publish
+        run: dotnet publish backend/AlexBotAPI/AlexBotAPI.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write # This is required for requesting the JWT
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+
+      - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0993316659C644B1B47A7B2442BEA12C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8A8886DE282947819DCAD6FC65C3EF63 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6648E3FC3EE94582BF7E71EB5B06B3F7 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8E206796633469D9F67DB58B68AAFBE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0A058D97D8E342B5B6F5CB31922E460B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0E6DE00303F94EC5AC5534AE9B149EBC }}
 
-      - name: 'Set Environment Variables'
-        uses: Azure/cli@v2
-        with:
-          inlineScript: |
-            az functionapp config appsettings set --name Javierlabs-Backend \
-              --resource-group Javierlabs-Site_RG \
-              --settings \
-              JLabsClientId=${{ secrets.JLabsClientId }} \
-              JLabsTenantId=${{ secrets.JLabsTenantId }} \
-              JLabsClientSecret=${{ secrets.JLabsClientSecret }} \
-              JLabsKeyVaultUrl=${{ secrets.JLabsKeyVaultUrl }}
-
-      - name: 'Deploy to Azure Functions'
-        uses: Azure/functions-action@v1
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'Javierlabs-Backend'
           slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          remote-build: true
+          package: .
