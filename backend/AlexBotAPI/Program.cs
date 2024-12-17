@@ -26,7 +26,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins(
+                // allow requests from the following domains
+                "https://javierlabs.com", 
+                "https://yellow-ocean-0f2f9500f.4.azurestaticapps.net", 
+                "http://localhost:5174/" // local use only when running on the frontend
+            )
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
