@@ -1,4 +1,4 @@
-# **Javierlabs Frontend**
+# **Javierlabs Monorepo**
 
 A professional portfolio website built using **React**, **Vite**, and **TypeScript**. This project is designed as a 
 Single Page Application (SPA) to showcase personal and professional achievements, skills, and projects. It integrates 
