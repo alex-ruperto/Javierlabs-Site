@@ -34,7 +34,8 @@ builder.Services.AddCors(options =>
                 // allow requests from the following domains
                 "https://javierlabs.com", 
                 "https://yellow-ocean-0f2f9500f.4.azurestaticapps.net", 
-                "http://localhost:5173" // local use only when running on the frontend
+                "http://localhost:5173", // local use only when running on the frontend
+                "http://localhost:4173"
             )
             .AllowAnyMethod()
             .AllowAnyHeader();
