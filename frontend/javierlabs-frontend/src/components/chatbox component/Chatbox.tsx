@@ -47,7 +47,9 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             let botMessageContent = "";
 
             // Account for certain responses.
-            const requestUrl = `https://javierlabs-backend-gkaje5hgend3etbh.eastus-01.azurewebsites.net/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
+            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
+            console.log("Request url: ", requestUrl);
             const response = await fetch(requestUrl, { method: 'GET'});
 
             if (response.status === 429) {
