@@ -13,7 +13,7 @@ Returns a status 200 OK if either of those conditions are met instead of doing t
 - apiKey and assistantId are now passed into the OpenAIService constructor rather than being initialized in the constructor. 
 This allows both variables to be awaited asynchronously in Program.cs.
 
-## [1.0.0] - 12/16/2024
+## [1.0.0] - 12/17/2024
 
 ### Added
 - Initial release of the Javierlabs site.
