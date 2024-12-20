@@ -58,3 +58,4 @@ jobs:
           action: "upload"
           app_location: "./frontend/javierlabs-frontend"
           output_location: "dist" # Built app content directory
+          github_id_token: ${{ steps.idtoken.outputs.result }}
