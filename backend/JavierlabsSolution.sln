@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlexBotAPI", "AlexBotAPI\Al
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioAPI", "PortfolioAPI\PortfolioAPI.csproj", "{06C3B7A6-53CA-41C4-AA08-6CF4E7648823}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPredictorAPI", "StockPredictorAPI\StockPredictorAPI.csproj", "{12EECC16-B73E-416C-9DFC-19581E3964DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{06C3B7A6-53CA-41C4-AA08-6CF4E7648823}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C3B7A6-53CA-41C4-AA08-6CF4E7648823}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C3B7A6-53CA-41C4-AA08-6CF4E7648823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12EECC16-B73E-416C-9DFC-19581E3964DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12EECC16-B73E-416C-9DFC-19581E3964DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12EECC16-B73E-416C-9DFC-19581E3964DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12EECC16-B73E-416C-9DFC-19581E3964DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -90,7 +90,7 @@
 /* Responsive Styles for Small Screens */
 @media screen and (max-width: 768px) {
     .typewriter {
-        font-size: 1.5rem; /* Reduce font size on smaller screens */
+        font-size: 1.4rem; /* Reduce font size on smaller screens */
     }
 
     .typewriter-container {

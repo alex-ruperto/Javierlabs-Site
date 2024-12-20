@@ -1,4 +1,4 @@
-# **Javierlabs Monorepo**
+tt# **Javierlabs Monorepo**
 
 A professional portfolio website built using **React**, **Vite**, **TypeScript**, and **ASP.NET Core**. This project is designed as a 
 Single Page Application (SPA) to showcase personal and professional achievements, skills, and projects. It integrates 
@@ -52,25 +52,28 @@ chatbot is powered by the OpenAI API, controlled with ASP.NET Core, and hosted o
 ## **Routes and SPA Support**
 
 ### **Home Page**
-### **/**
+#### **/**
 - Home page
 - The landing page for the site.
 
 ### **About Page**
-### **/about**
+#### **/about**
 - About page
 - Contains the chatbot where users can interact and ask about my professional career.
 
-### **/socials**
+### **About Page**
+#### **/socials**
 - Socials page
 - Contains links to my socials (GitHub, LinkedIn, Email).
 ---
 
 ## **Contact**
 
-For any inquiries or collaboration opportunities, reach out to via:
+For any inquiries or collaboration opportunities, reach out via:
 
 - **Email**: alex.ruperto@javierlabs.com
 - **Website**: https://javierlabs.com
+- **LinkedIn**: https://www.linkedin.com/in/alex-j-ruperto/
+- **GitHub**: Feel free to DM me here as well!
 
 ---
