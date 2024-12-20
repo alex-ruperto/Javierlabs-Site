@@ -14,10 +14,14 @@ builder.Host.UseSerilog((context, config) =>
         .WriteTo.File("logs/alexbotapi_service.log", rollingInterval: RollingInterval.Day);
 });
 
+// Retrieve OpenAI API Key and Assistant ID
+var keyVaultService = new KeyVaultService();
+var apiKey = await keyVaultService.GetSecret("OpenAIAPIKey");
+var assistantId = await keyVaultService.GetSecret("OpenAIAssistantId");
+var openAiService = new OpenAiService(apiKey, assistantId);
 
 // Add services to the DI container
-builder.Services.AddSingleton<KeyVaultService>();
-builder.Services.AddSingleton<OpenAiService>();
+builder.Services.AddSingleton(openAiService);
 builder.Services.AddControllers();
 
 // Add CORS Policy
@@ -30,7 +34,7 @@ builder.Services.AddCors(options =>
                 // allow requests from the following domains
                 "https://javierlabs.com", 
                 "https://yellow-ocean-0f2f9500f.4.azurestaticapps.net", 
-                "http://localhost:5174/" // local use only when running on the frontend
+                "http://localhost:5173" // local use only when running on the frontend
             )
             .AllowAnyMethod()
             .AllowAnyHeader();

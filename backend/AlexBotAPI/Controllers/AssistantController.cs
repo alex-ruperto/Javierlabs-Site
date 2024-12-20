@@ -36,7 +36,15 @@ public class AssistantController : ControllerBase
                 return;
             }
 
-            // Set response headers for streaming
+            // Check if the request headers don't contain "Accept" or if the "Accept" header doesn't contain "text/event-stream"
+            if (!Request.Headers.TryGetValue("Accept", out var acceptHeader) ||
+                !acceptHeader.ToString().Contains("text/event-stream", StringComparison.OrdinalIgnoreCase))
+            {
+                Response.StatusCode = 200; // Simply return a 200 response in to avoid starting a run.
+                return;
+            }
+            
+            // If this logic is reached, set response headers for streaming to start a run.
             Response.ContentType = "text/event-stream";
 
             await foreach (var response in _openAiService.GetAssistantResponseAsync(prompt))

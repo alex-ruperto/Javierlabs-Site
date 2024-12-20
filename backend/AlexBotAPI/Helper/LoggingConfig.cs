@@ -16,7 +16,7 @@ public static class LoggingConfig
     {
         // Set up Serilog logging configuration
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()  // Set the minimum log level
+            .MinimumLevel.Information()  // Set the minimum log level
             .WriteTo.Console()  // Logs to the console
             .WriteTo.File("logs/alexbotapi_service.log", rollingInterval: RollingInterval.Day)
             .CreateLogger();                // Create the logger using the configured sinks
