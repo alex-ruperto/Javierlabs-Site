@@ -18,21 +18,17 @@ public class OpenAiService
     /// <summary>
     /// Constructor that initializes OpenAI Service with required secrets and OpenAI Client setup.
     /// </summary>
-    /// <param name="keyVaultService">Provides the necessary keys to access the OpenAI API.</param>
     /// <exception cref="InvalidOperationException">Failure to retrieve secrets from the Azure Key Vault.</exception>
-    public OpenAiService(KeyVaultService keyVaultService)
+    public OpenAiService(string apiKey, string assistantId)
     {
-        // Retrieve secrets from the key vault
-        var apiKey = keyVaultService.GetSecret("OpenAIAPIKey").Result;
-        _assistantId = keyVaultService.GetSecret("OpenAIAssistantId").Result;
-
-        if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(_assistantId))
+        if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(assistantId))
         {
             throw new InvalidOperationException("Failed to retrieve the secrets from the Azure Key Vault.");
         }
         
         OpenAIClient openAiClient = new OpenAIClient(apiKey);
         _assistantClient = openAiClient.GetAssistantClient();
+        _assistantId = assistantId;
         _assistant = _assistantClient.GetAssistant(_assistantId);
     }
 
