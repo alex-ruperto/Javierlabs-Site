@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - '**/README.md'
-      - '**/CHANGELOG.md'
+      - 'README.md'
+      - 'CHANGELOG.md'
       - 'LICENSE'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths-ignore:
-      - '**/README.md'
-      - '**/CHANGELOG.md'
+      - 'README.md'
+      - 'CHANGELOG.md'
       - 'LICENSE'
 
 jobs:
