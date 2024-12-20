@@ -48,7 +48,7 @@ public class OpenAiService
 
         // Create a new thread with the assistant client and thread options
         AssistantThread assistantThread = await _assistantClient.CreateThreadAsync(threadOptions);
-
+        
         AsyncCollectionResult<StreamingUpdate> streamingUpdates = _assistantClient.CreateRunStreamingAsync(
             assistantThread.Id,
             _assistant.Id,

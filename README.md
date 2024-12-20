@@ -1,8 +1,8 @@
 # **Javierlabs Monorepo**
 
-A professional portfolio website built using **React**, **Vite**, and **TypeScript**. This project is designed as a 
+A professional portfolio website built using **React**, **Vite**, **TypeScript**, and **ASP.NET Core**. This project is designed as a 
 Single Page Application (SPA) to showcase personal and professional achievements, skills, and projects. It integrates 
-seamlessly with a backend API to provide chatbot functionality powered by Azure OpenAI services.
+seamlessly with a backend API to provide chatbot functionality powered by an OpenAI API Assistant.
 
 ---
 
@@ -19,7 +19,7 @@ seamlessly with a backend API to provide chatbot functionality powered by Azure 
 
 Javierlabs is a modern, fast, and interactive web application built with cutting-edge full-stack technologies. It 
 serves as a **portfolio platform** with integrated chatbot support to act as a professional career advocate. The 
-chatbot is powered by the OpenAI API, controlled with .NET, and hosted on Azure.
+chatbot is powered by the OpenAI API, controlled with ASP.NET Core, and hosted on Azure.
 
 ---
 
@@ -41,7 +41,7 @@ chatbot is powered by the OpenAI API, controlled with .NET, and hosted on Azure.
 - 🛤️ **React Router DOM**: Client-side routing.
 
 ### **Backend**
-- 🛠️ **ASP.NET Core**: OpenAI integration and chatbot backend.
+- 🛠️ **ASP.NET Core**: BuildOpenAI integration.
 
 ### **Hosting**
 - **Azure Static Web Apps**

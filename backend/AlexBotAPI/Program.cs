@@ -23,6 +23,9 @@ var openAiService = new OpenAiService(apiKey, assistantId);
 // Add services to the DI container
 builder.Services.AddSingleton(openAiService);
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer(); // Required for Swagger to find endpoints
+builder.Services.AddSwaggerGen();          // Registers Swagger generator
+
 
 // Add CORS Policy
 builder.Services.AddCors(options =>
@@ -77,6 +80,13 @@ var app = builder.Build();
 
 // Use Serilog for request logging
 app.UseSerilogRequestLogging();
+
+// Enable Swagger in development
+if (app.Environment.IsDevelopment()) // Only enable Swagger in development
+{
+    app.UseSwagger();                 // Enable Swagger middleware
+    app.UseSwaggerUI();               // Enable Swagger UI
+}
 
 // Enable Cross-Origin Resource Sharing
 app.UseCors("AllowAllOrigins");
