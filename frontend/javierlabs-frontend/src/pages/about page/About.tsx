@@ -17,6 +17,19 @@ export function About(): ReactElement {
     const [showChatThread, setShowChatThread] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
 
+    // Retrieve or create a unique session ID
+    function getSessionId(): string
+    {
+        let sessionId = sessionStorage.getItem("sessionId");
+        if(!sessionId)
+        {
+            sessionId = crypto.randomUUID() // Generate a random UUID
+            sessionStorage.setItem("sessionId", sessionId);
+        }
+        return sessionId;
+    }
+
+
     // Function to add a message with a unique ID
     function addMessage(message: Omit<Message, 'id'>): string {
         // Generate a unique ID for the message. This can be replaced by any UUID generator if needed.
