@@ -2,6 +2,7 @@ using AlexBotAPI.Helper;
 using AlexBotAPI.Services;
 using AlexBotAPI.Models;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,13 +19,18 @@ builder.Host.UseSerilog((context, config) =>
 var keyVaultService = new KeyVaultService();
 var apiKey = await keyVaultService.GetSecret("OpenAIAPIKey");
 var assistantId = await keyVaultService.GetSecret("OpenAIAssistantId");
-var openAiService = new OpenAiService(apiKey, assistantId);
 
 // Add services to the DI container
-builder.Services.AddSingleton(openAiService);
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton(provider =>
+{
+    var memoryCache = provider.GetRequiredService<IMemoryCache>();
+    return new OpenAiService(apiKey, assistantId, memoryCache);
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer(); // Required for Swagger to find endpoints
 builder.Services.AddSwaggerGen();          // Registers Swagger generator
+
 
 
 // Add CORS Policy
