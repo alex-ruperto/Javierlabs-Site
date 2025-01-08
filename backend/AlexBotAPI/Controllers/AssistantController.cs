@@ -38,7 +38,7 @@ public class AssistantController : ControllerBase
 #pragma warning disable OPENAI001 
             var threadOptions = new ThreadCreationOptions
             {
-                InitialMessages = { "Prepare for user interaction." }
+                InitialMessages = { }
             };
 #pragma warning restore OPENAI001
 

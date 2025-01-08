@@ -111,7 +111,6 @@ public class OpenAiService
                 _assistant.Id,
                 new RunCreationOptions()
                 {
-                    AdditionalInstructions = prompt,
                 }
             );
 
