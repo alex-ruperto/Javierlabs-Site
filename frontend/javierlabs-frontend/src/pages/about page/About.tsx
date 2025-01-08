@@ -16,20 +16,35 @@ export function About(): ReactElement {
     // Controls the visibility of the chat thread
     const [showChatThread, setShowChatThread] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
+    // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
+    const baseUrl = "http://localhost:5026";
 
     // Retrieve or create a unique session ID
     function getSessionId(): string
     {
-        let sessionId = sessionStorage.getItem("sessionId");
+        let sessionId = localStorage.getItem("sessionId");
         if(!sessionId)
         {
             sessionId = crypto.randomUUID() // Generate a random UUID
-            sessionStorage.setItem("sessionId", sessionId);
+            localStorage.setItem("sessionId", sessionId);
         }
         return sessionId;
     }
 
-
+    // Initialize assistant thread when the page loads
+    async function initializeAssistantThread()
+    {
+        const sessionId = getSessionId();
+        try{
+            const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
+            const response = await fetch(requestUrl, {method: "POST"});
+            if (!response.ok) {
+                console.error("Failed to initialize assistant thread: ", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error during thread initialization: ", error);
+        }
+    }
     // Function to add a message with a unique ID
     function addMessage(message: Omit<Message, 'id'>): string {
         // Generate a unique ID for the message. This can be replaced by any UUID generator if needed.
@@ -60,6 +75,9 @@ export function About(): ReactElement {
             setShowChatBox(true);
             setShowCircle(false);
             setShowTypewriter(true);
+
+            // Initialize the assistant thread
+            initializeAssistantThread();
         }, 3000); // wait 3 seconds before switching
 
         // Clean up timeout component on component unmount

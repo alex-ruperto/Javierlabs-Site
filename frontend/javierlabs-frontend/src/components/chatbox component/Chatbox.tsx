@@ -19,6 +19,9 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
         setInputValue(e.target.value); // update the state with the input value
     }
 
+    function getSessionId(): string | null {
+        return localStorage.getItem("sessionId");
+    }
 
     // Handle message submission
     async function handleSubmit() {
@@ -46,11 +49,25 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             // This variable accumulates streamed response text
             let botMessageContent = "";
 
-            // Account for certain responses.
-            const baseUrl = import.meta.env.VITE_API_BASE_URL;
-            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
+            // Retrieve the session ID
+            const sessionId = getSessionId();
+            if(!sessionId) {
+                updateMessage(botId, {text: "Session ID not found. Please refresh the page."})
+                setResponseIsLoading(false);
+                return;
+            }
+
+            // Construct the request URL
+            // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
+            const baseUrl = "http://localhost:5026";
+            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
             console.log("Request url: ", requestUrl);
-            const response = await fetch(requestUrl, { method: 'GET'});
+            const response = await fetch(requestUrl, {
+                method: 'GET',
+                headers: {
+                    Accept: 'text/event-stream'
+                }
+            });
 
             if (response.status === 429) {
                 // Rate limit exceeded
