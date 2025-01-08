@@ -19,22 +19,16 @@ export function About(): ReactElement {
     // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
     const baseUrl = "http://localhost:5026";
 
-    // Retrieve or create a unique session ID
-    function getSessionId(): string
+    function initializeSession(): string
     {
-        let sessionId = localStorage.getItem("sessionId");
-        if(!sessionId)
-        {
-            sessionId = crypto.randomUUID() // Generate a random UUID
-            localStorage.setItem("sessionId", sessionId);
-        }
+        const sessionId = crypto.randomUUID();
+        localStorage.setItem("sessionId", sessionId);
         return sessionId;
     }
-
     // Initialize assistant thread when the page loads
     async function initializeAssistantThread()
     {
-        const sessionId = getSessionId();
+        const sessionId = initializeSession(); // Reset the session Id
         try{
             const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
             const response = await fetch(requestUrl, {method: "POST"});

@@ -1,4 +1,4 @@
-import { useState, ReactElement } from 'react';
+import {useState, ReactElement, useEffect} from 'react';
 import "./Chatbox.css";
 import {Message} from "../chatthread component/ChatThread.tsx"
 import React from "react";
@@ -86,29 +86,27 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
                 return;
             }
 
-            // If we get here, response is OK, start the SSE
-            const eventSource = new EventSource(requestUrl);
+            // Start SSE if this logic is reached.
+            useEffect(() =>
+            {
+                const eventSource = new EventSource(requestUrl);
 
-            // On each chunk of data from the SSE:
-            eventSource.onmessage = (event) => {
-                const chunk = event.data;            // Current chunk of text from the server
-                botMessageContent += chunk;          // Append chunk to the accumulated response
+                eventSource.onmessage = (event) => {
+                    const chunk = event.data;
+                    botMessageContent += chunk;
+                    updateMessage(botId, { text: botMessageContent });
+                };
 
-                // Update the previously created bot message by its ID
-                updateMessage(botId, {
-                    text: botMessageContent,
-                });
-            };
+                eventSource.onerror = () => {
+                    eventSource.close();
+                    setResponseIsLoading(false);
+                };
 
-            eventSource.onerror = () => {
-                // On error, close the event source and stop loading
-                eventSource.close();
-                setResponseIsLoading(false);
-            };
-
-            eventSource.onopen = () => {
-                // When the connection opens, do nothing special
-            };
+                return () => {
+                    // Clean up event source on unmount or session reset
+                    eventSource.close();
+                };
+            }, [sessionId]); // Ensure this re-runs when sessionId changes.
         }
     }
 
