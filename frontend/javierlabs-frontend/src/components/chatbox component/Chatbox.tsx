@@ -79,8 +79,7 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
                         currentEventSource = null;
                         setResponseIsLoading(false);
                     } else {
-                        const chunk = event.data;
-                        botMessageContent += chunk;
+                        botMessageContent += event.data;
                         updateMessage(botId, { text: botMessageContent });
                     }
                 };
@@ -94,14 +93,9 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
                     }
                 };
 
-                // Close the connection when streaming completes
-                currentEventSource.onopen = () => {
-                    console.log("EventSource connection opened.");
-                };
             } catch (error) {
                 console.error("Error while handling the SSE request: ", error);
                 updateMessage(botId, { text: "Failed to stream response. Please try again later." });
-            } finally {
                 setResponseIsLoading(false);
             }
         }
