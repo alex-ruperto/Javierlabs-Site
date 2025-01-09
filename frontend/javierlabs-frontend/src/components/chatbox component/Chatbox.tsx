@@ -1,6 +1,6 @@
-import {useState, ReactElement} from 'react';
+import { useState, ReactElement } from 'react';
 import "./Chatbox.css";
-import {Message} from "../chatthread component/ChatThread.tsx"
+import { Message } from "../chatthread component/ChatThread.tsx"
 import React from "react";
 
 // triggers the addMessage function in the parent component (about page)
@@ -10,13 +10,13 @@ type ChatboxProps = {
     setShowChatThread: React.Dispatch<React.SetStateAction<boolean>>; // If needed to ensure the thread is shown after first message
 };
 
-export function Chatbox( { addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
+export function Chatbox({ addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
     const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
     let currentEventSource: EventSource | null = null; // track the current event source
 
     // handle changes of the input box
-    function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value); // update the state with the input value
     }
 
@@ -52,8 +52,8 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
 
             // Retrieve the session ID
             const sessionId = getSessionId();
-            if(!sessionId) {
-                updateMessage(botId, {text: "Session ID not found. Please refresh the page."})
+            if (!sessionId) {
+                updateMessage(botId, { text: "Session ID not found. Please refresh the page." })
                 setResponseIsLoading(false);
                 return;
             }
@@ -68,14 +68,13 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
             const baseUrl = "http://localhost:5026";
             const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
-            console.log("Request url: ", requestUrl);
 
             try {
                 // Start SSE if this logic is reached.
                 currentEventSource = new EventSource(requestUrl);
 
                 currentEventSource.onmessage = (event) => {
-                    if (event.data === "[DONE]"){
+                    if (event.data === "[DONE]") {
                         currentEventSource?.close();
                         currentEventSource = null;
                         setResponseIsLoading(false);
@@ -108,8 +107,8 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
         }
     }
 
-    async function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>){
-        if (e.key === 'Enter'){
+    async function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
             await handleSubmit();
         }
     }
@@ -138,7 +137,7 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
                     onClick={handleSubmit}
                     disabled={responseIsLoading}
                 >
-                    {responseIsLoading ? "Loading...": "Send"}
+                    {responseIsLoading ? "Loading..." : "Send"}
                 </button>
             </div>
         </div>
