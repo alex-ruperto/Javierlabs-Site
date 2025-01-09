@@ -38,6 +38,7 @@ export function About(): ReactElement {
         const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
         try {
             const response = await fetch(requestUrl, { method: "POST" });
+            console.log("Successfully retrieved assistant with Session ID: ", sessionId);
             if (!response.ok) {
                 console.error("Failed to initialize assistant thread: ", response.statusText);
                 addMessage({
