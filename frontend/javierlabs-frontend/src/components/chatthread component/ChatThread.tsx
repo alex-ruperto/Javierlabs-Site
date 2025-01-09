@@ -1,4 +1,4 @@
-﻿import {ReactElement} from 'react';
+﻿import { ReactElement } from 'react';
 import "./ChatThread.css";
 
 export interface Message {
@@ -11,7 +11,7 @@ type ChatThreadProps = {
     messages: Message[];
 };
 
-export function ChatThread({messages}: ChatThreadProps): ReactElement {
+export function ChatThread({ messages }: ChatThreadProps): ReactElement {
     return (
         <div className="chatbox-thread">
             {messages.map((message, index) => (

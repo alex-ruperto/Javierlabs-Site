@@ -1,6 +1,6 @@
 import { useState, ReactElement } from 'react';
 import "./Chatbox.css";
-import {Message} from "../chatthread component/ChatThread.tsx"
+import { Message } from "../chatthread component/ChatThread.tsx"
 import React from "react";
 
 // triggers the addMessage function in the parent component (about page)
@@ -10,15 +10,19 @@ type ChatboxProps = {
     setShowChatThread: React.Dispatch<React.SetStateAction<boolean>>; // If needed to ensure the thread is shown after first message
 };
 
-export function Chatbox( { addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
+export function Chatbox({ addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
     const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
+    let currentEventSource: EventSource | null = null; // track the current event source
 
     // handle changes of the input box
-    function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setInputValue(e.target.value); // update the state with the input value
     }
 
+    function getSessionId(): string | null {
+        return sessionStorage.getItem("sessionId");
+    }
 
     // Handle message submission
     async function handleSubmit() {
@@ -46,57 +50,59 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
             // This variable accumulates streamed response text
             let botMessageContent = "";
 
-            // Account for certain responses.
-            const baseUrl = import.meta.env.VITE_API_BASE_URL;
-            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}`;
-            console.log("Request url: ", requestUrl);
-            const response = await fetch(requestUrl, { method: 'GET'});
-
-            if (response.status === 429) {
-                // Rate limit exceeded
-                updateMessage(botId, { text: "Rate limit exceeded. Please try again later." });
-                setResponseIsLoading(false);
-                return;
-            } else if (response.status === 503) {
-                // Server issue
-                updateMessage(botId, { text: "Server is currently unavailable. Please try again later." });
-                setResponseIsLoading(false);
-                return;
-            } else if (!response.ok) {
-                // Other error
-                updateMessage(botId, { text: "An error occurred. Please try again." });
+            // Retrieve the session ID
+            const sessionId = getSessionId();
+            if (!sessionId) {
+                updateMessage(botId, { text: "Session ID not found. Please refresh the page." })
                 setResponseIsLoading(false);
                 return;
             }
 
-            // If we get here, response is OK, start the SSE
-            const eventSource = new EventSource(requestUrl);
+            // Close the current EventSource if it exists
+            if (currentEventSource) {
+                currentEventSource.close();
+                currentEventSource = null;
+            }
 
-            // On each chunk of data from the SSE:
-            eventSource.onmessage = (event) => {
-                const chunk = event.data;            // Current chunk of text from the server
-                botMessageContent += chunk;          // Append chunk to the accumulated response
+            // Construct the request URL
+            // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
+            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
 
-                // Update the previously created bot message by its ID
-                updateMessage(botId, {
-                    text: botMessageContent,
-                });
-            };
+            try {
+                // Start SSE if this logic is reached.
+                currentEventSource = new EventSource(requestUrl);
 
-            eventSource.onerror = () => {
-                // On error, close the event source and stop loading
-                eventSource.close();
+                currentEventSource.onmessage = (event) => {
+                    if (event.data === "[DONE]") {
+                        currentEventSource?.close();
+                        currentEventSource = null;
+                        setResponseIsLoading(false);
+                    } else {
+                        botMessageContent += event.data;
+                        updateMessage(botId, { text: botMessageContent });
+                    }
+                };
+
+                currentEventSource.onerror = () => {
+                    if (currentEventSource?.readyState !== EventSource.CLOSED) {
+                        setResponseIsLoading(false);
+                        updateMessage(botId, { text: "An error occurred while streaming. Please try again." });
+                        currentEventSource?.close();
+                        currentEventSource = null;
+                    }
+                };
+
+            } catch (error) {
+                console.error("Error while handling the SSE request: ", error);
+                updateMessage(botId, { text: "Failed to stream response. Please try again later." });
                 setResponseIsLoading(false);
-            };
-
-            eventSource.onopen = () => {
-                // When the connection opens, do nothing special
-            };
+            }
         }
     }
 
-    async function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>){
-        if (e.key === 'Enter'){
+    async function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
             await handleSubmit();
         }
     }
@@ -125,7 +131,7 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
                     onClick={handleSubmit}
                     disabled={responseIsLoading}
                 >
-                    {responseIsLoading ? "Loading...": "Send"}
+                    {responseIsLoading ? "Loading..." : "Send"}
                 </button>
             </div>
         </div>
