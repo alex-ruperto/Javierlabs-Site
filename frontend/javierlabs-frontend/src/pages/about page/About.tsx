@@ -1,48 +1,57 @@
 import { useState, useEffect, ReactElement } from 'react';
 import './About.css';
-import {Navbar} from '../../components/navbar component/Navbar.tsx';
-import {Chatbox} from '../../components/chatbox component/Chatbox.tsx';
-import {ChatThread, Message} from '../../components/chatthread component/ChatThread.tsx'
+import { Navbar } from '../../components/navbar component/Navbar.tsx';
+import { Chatbox } from '../../components/chatbox component/Chatbox.tsx';
+import { ChatThread, Message } from '../../components/chatthread component/ChatThread.tsx'
 import circle from "../../assets/Circle.svg"
 
 
 export function About(): ReactElement {
-    // Controls the visibility of the blinking circle
-    const [showCircle, setShowCircle] = useState(true);
+    // State that controls whether the request is still "loading"
+    const [loading, setLoading] = useState(true);
     // Controls the visibility of the typewriter
     const [showTypewriter, setShowTypewriter] = useState(false);
     // Controls the visibility of the chat box
     const [showChatBox, setShowChatBox] = useState(false);
     // Controls the visibility of the chat thread
     const [showChatThread, setShowChatThread] = useState(false);
+    // Conversation messages
     const [messages, setMessages] = useState<Message[]>([]);
     // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
     const baseUrl = "http://localhost:5026";
 
-    function getOrCreateSessionId(): string
-    {
+    // Get or create the session ID
+    function getOrCreateSessionId(): string {
         // Check if we already have a sessionId
         let sessionId = sessionStorage.getItem("sessionId");
 
         // If not, generate a fresh session Id
-        if (!sessionId){
+        if (!sessionId) {
             sessionId = crypto.randomUUID();
             sessionStorage.setItem("sessionId", sessionId);
         }
         return sessionId;
     }
     // Initialize assistant thread when the page loads
-    async function initializeAssistantThread()
-    {
+    async function initializeAssistantThread() {
         const sessionId = getOrCreateSessionId(); // Don't overwrite it if already exists.
-        try{
-            const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
-            const response = await fetch(requestUrl, {method: "POST"});
+        const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
+        try {
+            const response = await fetch(requestUrl, { method: "POST" });
             if (!response.ok) {
                 console.error("Failed to initialize assistant thread: ", response.statusText);
+                addMessage({
+                    text: `Error: Failed to initialize thread (${response.statusText})`,
+                    sender: 'bot',
+                });
             }
         } catch (error) {
             console.error("Error during thread initialization: ", error);
+            addMessage({
+                text: `Error: Failed to initialize thread (${error})`,
+                sender: 'bot',
+            });
+
         }
     }
     // Function to add a message with a unique ID
@@ -69,30 +78,63 @@ export function About(): ReactElement {
         );
     }
 
+
     useEffect(() => {
-        // Show the circle until the init request is done, then hide the circle & show the typewriter and chatbox.
-        const doInit = async () => {
+        const doAll = async () => {
+            // Load Messages
+            const savedMessages = sessionStorage.getItem("messages");
+            if (savedMessages) {
+                try {
+                    const parsed = JSON.parse(savedMessages) as Message[];
+                    if (parsed.length > 0) {
+                        setMessages(parsed);
+                        // Show the thread if there are messages
+                        setShowChatThread(true);
+                    }
+                } catch (error) {
+                    console.error("Failed to parse saved messages: ", error);
+                }
+            }
+
+            // Initialize or retrieve the Assistant
             await initializeAssistantThread();
-            setShowCircle(false);
-            setShowTypewriter(true);
+
+            setLoading(false);
+
+            // If no messages so far, show the typewriter effect.
+            setShowTypewriter(messages.length === 0);
+
+            // Show chat input
             setShowChatBox(true);
         };
-        doInit();
-        }, []);
+
+        doAll();
+    }, []);
+
+    useEffect(() => {
+        sessionStorage.setItem("messages", JSON.stringify(messages));
+    }, [messages]);
+
+    // While loading is true, ONLY show blinking circle (and the navbar if desired)
+    if (loading) {
+        return (
+            <div className="about">
+                <Navbar />
+                <div className="about-content-container">
+                    <div className="circle-container">
+                        <img src={circle} alt="Circle" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="about">
             <Navbar />
 
             <div className="about-content-container">
-                {/* Show blinking circle first */}
-                {showCircle && (
-                    <div className="circle-container">
-                        <img src={circle} alt="Circle"></img>
-                    </div>
-                )}
-
-                { /* Show typewriter effect after the circle disappears */}
+                {/* If we have zero messages, show the typewriter prompt */}
                 {showTypewriter && messages.length === 0 && (
                     <div className="typewriter-container">
                         <div className="typewriter">What can I help you with?</div>
@@ -110,10 +152,10 @@ export function About(): ReactElement {
                 {/* Chat Input Box */}
                 {showChatBox && (
                     <div className="chatbox-container-wrapper">
-                        <Chatbox 
-                            addMessage={addMessage} 
-                            updateMessage={updateMessage} 
-                            setShowChatThread={setShowChatThread}/>
+                        <Chatbox
+                            addMessage={addMessage}
+                            updateMessage={updateMessage}
+                            setShowChatThread={setShowChatThread} />
                     </div>
                 )}
             </div>

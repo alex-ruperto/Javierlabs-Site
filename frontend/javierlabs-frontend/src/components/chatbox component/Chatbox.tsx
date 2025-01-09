@@ -80,7 +80,6 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
                         currentEventSource = null;
                         setResponseIsLoading(false);
                     } else {
-                        console.log("Received chunk from server: ", event.data);
                         const chunk = event.data;
                         botMessageContent += chunk;
                         updateMessage(botId, { text: botMessageContent });
