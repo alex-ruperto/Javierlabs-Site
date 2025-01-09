@@ -61,3 +61,7 @@ design/__MACOSX/
 # Docker
 docker-compose.override.yml
 *.dockerignore
+
+# Extra
+backend/StockPredictorAPI/StockPredictorRepo/
+
