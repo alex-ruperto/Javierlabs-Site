@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactElement } from 'react';
+import { useState, useRef, useEffect, ReactElement } from 'react';
 import './About.css';
 import { Navbar } from '../../components/navbar component/Navbar.tsx';
 import { Chatbox } from '../../components/chatbox component/Chatbox.tsx';
@@ -17,6 +17,7 @@ export function About(): ReactElement {
     const [showChatThread, setShowChatThread] = useState(false);
     // Conversation messages
     const [messages, setMessages] = useState<Message[]>([]);
+    const threadContainerRef = useRef<HTMLDivElement>(null);
     // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
     const baseUrl = "http://localhost:5026";
 
@@ -112,9 +113,18 @@ export function About(): ReactElement {
         doAll();
     }, []);
 
+    // Set the session storage messages to the messages array.
     useEffect(() => {
         sessionStorage.setItem("messages", JSON.stringify(messages));
     }, [messages]);
+
+    // Whenever messages change, OR the page finishes loading, OR the thread becomes visible scroll the .chat-thread-container
+    useEffect(() => {
+        if (!loading && showChatThread && threadContainerRef.current) {
+            threadContainerRef.current.scrollTop = threadContainerRef.current.scrollHeight;
+        }
+    }, [loading, showChatThread, messages]);
+
 
     // While loading is true, ONLY show blinking circle (and the navbar if desired)
     if (loading) {
@@ -145,7 +155,7 @@ export function About(): ReactElement {
 
                 {/* Chat Thread */}
                 {showChatThread && (
-                    <div className="chat-thread-container">
+                    <div className="chat-thread-container" ref={threadContainerRef}>
                         <ChatThread messages={messages} />
                     </div>
                 )}
