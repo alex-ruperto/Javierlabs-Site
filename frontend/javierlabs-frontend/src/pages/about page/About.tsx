@@ -19,16 +19,22 @@ export function About(): ReactElement {
     // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
     const baseUrl = "http://localhost:5026";
 
-    function initializeSession(): string
+    function getOrCreateSessionId(): string
     {
-        const sessionId = crypto.randomUUID();
-        localStorage.setItem("sessionId", sessionId);
+        // Check if we already have a sessionId
+        let sessionId = sessionStorage.getItem("sessionId");
+
+        // If not, generate a fresh session Id
+        if (!sessionId){
+            sessionId = crypto.randomUUID();
+            sessionStorage.setItem("sessionId", sessionId);
+        }
         return sessionId;
     }
     // Initialize assistant thread when the page loads
     async function initializeAssistantThread()
     {
-        const sessionId = initializeSession(); // Reset the session Id
+        const sessionId = getOrCreateSessionId(); // Don't overwrite it if already exists.
         try{
             const requestUrl = `${baseUrl}/api/assistant/init?sessionId=${sessionId}`;
             const response = await fetch(requestUrl, {method: "POST"});
@@ -64,21 +70,15 @@ export function About(): ReactElement {
     }
 
     useEffect(() => {
-        // Show typewriter effect after the circle has been displayed for three seconds.
-        const timeout = setTimeout(() => {
-            setShowChatBox(true);
+        // Show the circle until the init request is done, then hide the circle & show the typewriter and chatbox.
+        const doInit = async () => {
+            await initializeAssistantThread();
             setShowCircle(false);
             setShowTypewriter(true);
-
-            // Initialize the assistant thread
-            initializeAssistantThread();
-        }, 3000); // wait 3 seconds before switching
-
-        // Clean up timeout component on component unmount
-        return () => clearTimeout(timeout);
-        },
-        []
-    );
+            setShowChatBox(true);
+        };
+        doInit();
+        }, []);
 
     return (
         <div className="about">
@@ -110,7 +110,10 @@ export function About(): ReactElement {
                 {/* Chat Input Box */}
                 {showChatBox && (
                     <div className="chatbox-container-wrapper">
-                        <Chatbox addMessage={addMessage} updateMessage={updateMessage} setShowChatThread={setShowChatThread}/>
+                        <Chatbox 
+                            addMessage={addMessage} 
+                            updateMessage={updateMessage} 
+                            setShowChatThread={setShowChatThread}/>
                     </div>
                 )}
             </div>

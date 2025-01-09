@@ -1,4 +1,4 @@
-import {useState, ReactElement, useEffect} from 'react';
+import {useState, ReactElement} from 'react';
 import "./Chatbox.css";
 import {Message} from "../chatthread component/ChatThread.tsx"
 import React from "react";
@@ -13,6 +13,7 @@ type ChatboxProps = {
 export function Chatbox( { addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
     const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
+    let currentEventSource: EventSource | null = null; // track the current event source
 
     // handle changes of the input box
     function handleInputChange (e: React.ChangeEvent<HTMLInputElement>) {
@@ -20,7 +21,7 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
     }
 
     function getSessionId(): string | null {
-        return localStorage.getItem("sessionId");
+        return sessionStorage.getItem("sessionId");
     }
 
     // Handle message submission
@@ -57,56 +58,54 @@ export function Chatbox( { addMessage, updateMessage, setShowChatThread }: Chatb
                 return;
             }
 
+            // Close the current EventSource if it exists
+            if (currentEventSource) {
+                currentEventSource.close();
+                currentEventSource = null;
+            }
+
             // Construct the request URL
             // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
             const baseUrl = "http://localhost:5026";
             const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
             console.log("Request url: ", requestUrl);
-            const response = await fetch(requestUrl, {
-                method: 'GET',
-                headers: {
-                    Accept: 'text/event-stream'
-                }
-            });
 
-            if (response.status === 429) {
-                // Rate limit exceeded
-                updateMessage(botId, { text: "Rate limit exceeded. Please try again later." });
+            try {
+                // Start SSE if this logic is reached.
+                currentEventSource = new EventSource(requestUrl);
+
+                currentEventSource.onmessage = (event) => {
+                    if (event.data === "[DONE]"){
+                        currentEventSource?.close();
+                        currentEventSource = null;
+                        setResponseIsLoading(false);
+                    } else {
+                        console.log("Received chunk from server: ", event.data);
+                        const chunk = event.data;
+                        botMessageContent += chunk;
+                        updateMessage(botId, { text: botMessageContent });
+                    }
+                };
+
+                currentEventSource.onerror = () => {
+                    if (currentEventSource?.readyState !== EventSource.CLOSED) {
+                        setResponseIsLoading(false);
+                        updateMessage(botId, { text: "An error occurred while streaming. Please try again." });
+                        currentEventSource?.close();
+                        currentEventSource = null;
+                    }
+                };
+
+                // Close the connection when streaming completes
+                currentEventSource.onopen = () => {
+                    console.log("EventSource connection opened.");
+                };
+            } catch (error) {
+                console.error("Error while handling the SSE request: ", error);
+                updateMessage(botId, { text: "Failed to stream response. Please try again later." });
+            } finally {
                 setResponseIsLoading(false);
-                return;
-            } else if (response.status === 503) {
-                // Server issue
-                updateMessage(botId, { text: "Server is currently unavailable. Please try again later." });
-                setResponseIsLoading(false);
-                return;
-            } else if (!response.ok) {
-                // Other error
-                updateMessage(botId, { text: "An error occurred. Please try again." });
-                setResponseIsLoading(false);
-                return;
             }
-
-            // Start SSE if this logic is reached.
-            useEffect(() =>
-            {
-                const eventSource = new EventSource(requestUrl);
-
-                eventSource.onmessage = (event) => {
-                    const chunk = event.data;
-                    botMessageContent += chunk;
-                    updateMessage(botId, { text: botMessageContent });
-                };
-
-                eventSource.onerror = () => {
-                    eventSource.close();
-                    setResponseIsLoading(false);
-                };
-
-                return () => {
-                    // Clean up event source on unmount or session reset
-                    eventSource.close();
-                };
-            }, [sessionId]); // Ensure this re-runs when sessionId changes.
         }
     }
 
