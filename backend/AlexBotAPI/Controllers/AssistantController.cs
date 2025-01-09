@@ -32,9 +32,6 @@ public class AssistantController : ControllerBase
 
         try
         {
-            // Clear any previous mappings or threads for this session ID
-            _openAiService.ClearSession(sessionId);
-
 #pragma warning disable OPENAI001 
             var threadOptions = new ThreadCreationOptions
             {

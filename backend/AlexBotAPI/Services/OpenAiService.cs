@@ -111,6 +111,7 @@ public class OpenAiService
                 _assistant.Id,
                 new RunCreationOptions()
                 {
+                    AdditionalMessages = { prompt }
                 }
             );
 
