@@ -19,7 +19,7 @@ export function About(): ReactElement {
     const [messages, setMessages] = useState<Message[]>([]);
     const threadContainerRef = useRef<HTMLDivElement>(null);
     // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
-    const baseUrl = "http://localhost:5026";
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     // Get or create the session ID
     function getOrCreateSessionId(): string {

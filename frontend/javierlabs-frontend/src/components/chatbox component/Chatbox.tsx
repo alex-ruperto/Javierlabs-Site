@@ -66,7 +66,7 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
 
             // Construct the request URL
             // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
-            const baseUrl = "http://localhost:5026";
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
             const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
 
             try {
