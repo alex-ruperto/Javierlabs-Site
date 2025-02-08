@@ -2,9 +2,9 @@
 
 A professional portfolio website built using **React**, **Vite**, **TypeScript**, and **ASP.NET Core**. This project is designed as a 
 Single Page Application (SPA) to showcase personal and professional achievements, skills, and projects. It integrates 
-seamlessly with a backend API to provide chatbot functionality powered by an OpenAI API Assistant.
+seamlessly with the backend API to provide chatbot functionality powered by an OpenAI API Assistant.
 
-![javierlabs-demo.gif](https://github.com/alex-ruperto/Javierlabs-Site/blob/develop/assets/javierlabs-demo.gif)
+![javierlabs-demo.gif](https://github.com/alex-ruperto/Javierlabs-Site/blob/develop/assets/javierlabs-demo2.gif)
 ---
 
 ## **Table of Contents**
@@ -31,6 +31,7 @@ chatbot is powered by the OpenAI API, controlled with ASP.NET Core, and hosted o
 - 💬 **Interactive Chatbot**: Allows users to interact with a digital assistant for career-related queries.
 - ☁️ **OpenAI API Assistant Integration**: Backend chatbot powered by OpenAI Assistants API.
 - 🚀 **Deployment on Azure**: Static Web App and backend App service deployed with Azure Static Web Apps.
+- 🎨 **GruvBox Theme**: [Check out the Vim theme here!](https://github.com/morhetz/gruvbox)
 
 ---
 
