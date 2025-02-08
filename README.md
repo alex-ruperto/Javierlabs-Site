@@ -4,6 +4,7 @@ A professional portfolio website built using **React**, **Vite**, **TypeScript**
 Single Page Application (SPA) to showcase personal and professional achievements, skills, and projects. It integrates 
 seamlessly with a backend API to provide chatbot functionality powered by an OpenAI API Assistant.
 
+![javierlabs-demo.gif](https://github.com/alex-ruperto/Javierlabs-Site/blob/develop/assets/javierlabs-demo.gif)
 ---
 
 ## **Table of Contents**
