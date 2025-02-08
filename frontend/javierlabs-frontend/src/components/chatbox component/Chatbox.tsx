@@ -13,7 +13,6 @@ type ChatboxProps = {
 export function Chatbox({ addMessage, updateMessage, setShowChatThread }: ChatboxProps): ReactElement {
     const [inputValue, setInputValue] = useState(''); // input field value
     const [responseIsLoading, setResponseIsLoading] = useState(false); // Loading state for bot streaming response
-    let currentEventSource: EventSource | null = null; // track the current event source
 
     // handle changes of the input box
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -48,7 +47,6 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
             setResponseIsLoading(true);
 
             // This variable accumulates streamed response text
-            let botMessageContent = "";
 
             // Retrieve the session ID
             const sessionId = getSessionId();
@@ -58,40 +56,49 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
                 return;
             }
 
-            // Close the current EventSource if it exists
-            if (currentEventSource) {
-                currentEventSource.close();
-                currentEventSource = null;
-            }
-
             // Construct the request URL
             // Replace with http://localhost:XXXX for local dev or import.meta.env.VITE_API_BASE_URL for prod
-            const baseUrl = import.meta.env.VITE_API_BASE_URL;
-            const requestUrl = `${baseUrl}/api/assistant/stream?prompt=${encodeURIComponent(inputValue)}&sessionId=${sessionId}`;
+            const baseUrl = import.meta.env.VITE_API_BASE_URL
+            const requestUrl = `${baseUrl}/api/assistant/stream`;
 
             try {
-                // Start SSE if this logic is reached.
-                currentEventSource = new EventSource(requestUrl);
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'text/event-stream'
+                    },
+                    body: JSON.stringify({
+                        prompt: inputValue,
+                        sessionId: sessionId
+                    })
+                });
 
-                currentEventSource.onmessage = (event) => {
-                    if (event.data === "[DONE]") {
-                        currentEventSource?.close();
-                        currentEventSource = null;
-                        setResponseIsLoading(false);
-                    } else {
-                        botMessageContent += event.data;
-                        updateMessage(botId, { text: botMessageContent });
-                    }
-                };
+                if (!response.ok) {
+                    setResponseIsLoading(false);
+                    updateMessage(botId, { text: "An error occurred while streaming. Please try again." });
+                }
 
-                currentEventSource.onerror = () => {
-                    if (currentEventSource?.readyState !== EventSource.CLOSED) {
-                        setResponseIsLoading(false);
-                        updateMessage(botId, { text: "An error occurred while streaming. Please try again." });
-                        currentEventSource?.close();
-                        currentEventSource = null;
+                // Process the streaming response with a reader.
+                const reader = response.body!.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let botMessageContent = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    // Convert chunk to text.
+                    const chunk = decoder.decode(value);
+                    if (chunk.includes("[DONE]")) {
+                        break;
                     }
-                };
+
+                    botMessageContent += chunk;
+                    updateMessage(botId, { text: botMessageContent });
+                }
+
+                setResponseIsLoading(false);
 
             } catch (error) {
                 console.error("Error while handling the SSE request: ", error);
@@ -106,6 +113,7 @@ export function Chatbox({ addMessage, updateMessage, setShowChatThread }: Chatbo
             await handleSubmit();
         }
     }
+
 
     /**
      * Render the chat input UI
