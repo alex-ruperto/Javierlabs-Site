@@ -5,6 +5,7 @@ Single Page Application (SPA) to showcase personal and professional achievements
 seamlessly with the backend API to provide chatbot functionality powered by an OpenAI API Assistant.
 
 ![javierlabs-demo.gif](https://github.com/alex-ruperto/Javierlabs-Site/blob/develop/assets/javierlabs-demo2.gif)
+
 ---
 
 ## **Table of Contents**
