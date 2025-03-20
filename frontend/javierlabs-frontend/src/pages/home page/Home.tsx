@@ -1,5 +1,5 @@
-﻿import {ReactElement} from 'react';
-import {Navbar} from '../../components/navbar component/Navbar.tsx';
+﻿import { ReactElement } from 'react';
+import { Navbar } from '../../components/navbar component/Navbar.tsx';
 import './Home.css';
 
 /**
@@ -45,7 +45,7 @@ export function Home(): ReactElement {
                         </li>
                         <li>
                             <span className="key">Current Occupation: </span>
-                            <span className="value">PLC Technician</span>
+                            <span className="value">Software Engineer</span>
 
                         </li>
                         <li>
